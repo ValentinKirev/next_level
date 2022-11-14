@@ -17,7 +17,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'next_level.news',
-    'next_level.games'
+    'next_level.games',
+    'next_level.guides',
+    'next_level.accounts',
+    'next_level.common',
 ]
 
 MIDDLEWARE = [
@@ -96,3 +99,5 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.AppUser'
