@@ -1,11 +1,11 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-    <h1>{% if request.user.is_authenticated %}
-        <span>{{ request.user }}, </span>
+    <h1 class="pt-10">{% if request.user.is_authenticated %}
+        <span class="span">{{ request.user|capfirst }}, </span>
         {% endif %}
         <span>Welcome on the Next Level!</span>
     </h1>
     <br>
-    <h2>Dive into the vast world of the MMORPG games!</h2>
+    <h2 class="pb-10">Dive into the vast world of the MMORPG games!</h2>
 {% endblock content %}

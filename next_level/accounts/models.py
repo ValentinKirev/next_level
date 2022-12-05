@@ -13,7 +13,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'User'
 
-    MAX_USERNAME_LENGTH = 20
+    MAX_USERNAME_LENGTH = 50
     MIN_USERNAME_LENGTH = 3
 
     username = models.CharField(
@@ -56,6 +56,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     )
 
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     objects = AppUserManager()
 
@@ -63,12 +64,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 class Profile(models.Model):
     MALE = 'Male'
     FEMALE = 'Female'
-    DONT_SHOW = 'Dont show'
 
     GENDER_CHOICES = [
         (MALE, MALE),
         (FEMALE, FEMALE),
-        (DONT_SHOW, DONT_SHOW)
     ]
 
     MAX_FIRST_NAME_LENGTH = 25
@@ -144,3 +143,12 @@ class Profile(models.Model):
     user = models.OneToOneField(
         AppUser, on_delete=models.CASCADE
     )
+
+    @property
+    def get_full_name(self):
+        if self.first_name is not None and self.last_name is not None:
+            return f"{self.first_name} {self.last_name}"
+        elif self.first_name is not None:
+            return self.first_name
+        elif self.last_name is not None:
+            return self.last_name

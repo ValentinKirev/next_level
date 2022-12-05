@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        main {
+            background-image: url({% static '/images/dead-hero.jpg'%});
+            padding-top: 5rem;
+            padding-bottom: 40rem;
+        }
+    </style>
+    <h2>
+        Your account was successfully deleted! We will miss you hero!
+    </h2>
+{% endblock %}

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth import admin as auth_admin
 
+from next_level.accounts.forms import UserCreateForm
 from next_level.accounts.models import Profile
 
 UserModel = get_user_model()
@@ -9,13 +10,15 @@ UserModel = get_user_model()
 
 @admin.register(UserModel)
 class AppUserAdmin(auth_admin.UserAdmin):
-    list_display = ('username', 'is_superuser', 'is_staff', 'is_active')
+    add_form = UserCreateForm
+    list_display = ('username', 'email', 'is_superuser', 'is_staff', 'is_active')
 
     fieldsets = (
         (
             None, {
                 "fields": (
                     "username",
+                    "email",
                     "password"
                 )
             }
@@ -48,6 +51,7 @@ class AppUserAdmin(auth_admin.UserAdmin):
                 ),
                 "fields": (
                     "username",
+                    "email",
                     "password1",
                     "password2",
                     "is_active",

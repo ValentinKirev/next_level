@@ -1,9 +1,14 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+    {% if created %}
+        <h1>Welcome, <span class="span">{{ object.user.username }}</span> your account is successfully created!</h1>
+        <h1 class="p-4">Please, fill your profile information.</h1>
+    {% endif %}
     <section class="container-fluid justify-content-center pt-10 pb-10">
         <div class="container-sm justify-content-center">
-            <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'register' %}" method="post">
+            <form class="col-lg-12 offset-lg-0 container-fluid" action="{% url 'profile edit' pk=object.pk %}"
+                  method="post" enctype="multipart/form-data">
                 {% for field in form %}
                     <div class="container-fluid">
                         <label class="row justify-content-center col-form-label"
@@ -15,10 +20,7 @@
                     </div>
                 {% endfor %}
                 <div class="container-fluid">
-                    <input type="submit" class="btn btn-primary form-control" value="Register">
-                </div>
-                <div class="row container-fluid">
-                    <p>Already have account? <a href="{% url 'login' %}">Sign-In!</a></p>
+                    <input type="submit" class="btn btn-primary form-control" value="Save changes">
                 </div>
                 {% csrf_token %}
             </form>

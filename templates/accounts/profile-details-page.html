@@ -1,0 +1,116 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <section class="container-fluid justify-content-center pt-10 pb-10">
+        <div class="container-xl w-50 justify-content-center">
+            <div class="row">
+                <div class="col-lg-12 mb-4 mb-sm-5">
+                    <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
+                        <div class="row align-items-center">
+                            {% if object.profile_picture %}
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <img src="{{ object.profile_picture.url }}" class="img-fluid" alt="profile-img">
+                                </div>
+                            {% else %}
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <img src="{% static '/images/default-profile-img.png' %}" class="img-fluid"
+                                         alt="profile-img">
+                                </div>
+                            {% endif %}
+                            <div class="col-lg-6 px-xl-10">
+                                {% if object.get_full_name %}
+                                    <div class="display-26 text-primary me-2 font-weight-600">
+                                        <h3 class="h2 text-primary">{{ object.get_full_name }}</h3>
+                                    </div>
+                                {% endif %}
+                                <ul class="list-unstyled mb-1-9">
+                                    <li class="mb-2 mb-xl-3 display-28"><span
+                                            class="display-26 text-primary me-2 font-weight-600">Username:</span>
+                                        {{ object.user.username }}
+                                    </li>
+                                    <li class="mb-2 mb-xl-3 display-28"><span
+                                            class="display-26 text-primary me-2 font-weight-600">Email:</span>
+                                        {{ object.user.email }}
+                                    </li>
+                                    {% if object.age %}
+                                        <li class="mb-2 mb-xl-3 display-28"><span
+                                                class="display-26 text-primary me-2 font-weight-600">Age:</span>
+                                            {{ object.age }}
+                                        </li>
+                                    {% endif %}
+                                    {% if object.gender %}
+                                        <li class="mb-2 mb-xl-3 display-28"><span
+                                                class="display-26 text-primary me-2 font-weight-600">Gender:</span>
+                                            {{ object.gender }}
+                                        </li>
+                                    {% endif %}
+                                    {% if object.country %}
+                                        <li class="mb-2 mb-xl-3 display-28"><span
+                                                class="display-26 text-primary me-2 font-weight-600">Country:</span>
+                                            {{ object.country }}
+                                        </li>
+                                    {% endif %}
+                                    {% if object.city %}
+                                        <li class="display-28"><span
+                                                class="display-26 text-primary me-2 font-weight-600">City:</span>
+                                            {{ object.city }}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if object.description %}
+                    <div class="col-lg-12 mb-4 mb-sm-5">
+                        <div>
+                            <h5 class="section-title text-primary mb-3 mb-sm-4">About Me</h5>
+                            <p class="justify-content-center">{{ object.description }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row mb-sm-2">
+                    <div class="container-fluid">
+                        {% if request.user == object.user %}
+                            <a href="{% url 'profile edit' pk=object.pk %}" class="btn btn-primary p-sm-2 m-sm-2">Edit
+                                profile</a>
+                            <button type="button" class="btn btn-danger p-sm-2 m-sm-2" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                                Delete profile
+                            </button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to
+                                                delete your account?</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-primary">
+                                                Once you delete your account the world of MMORPG games in
+                                                <span class="span">NEXT-LEVEL</span> will be closed for you!
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary p-sm-2 m-sm-2"
+                                                    data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <a href="{% url 'profile delete' pk=object.pk %}"
+                                               class="btn btn-danger p-sm-2 m-sm-2">Delete
+                                                profile</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

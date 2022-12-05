@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-rg_b)^6h)(93odh_8q*dt3kv@h^!5wdeor=f8(d7qcf4aph@$*'
@@ -81,6 +83,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'next_level.accounts.backends.EmailOrUsernameModelBackend',
+]
 
 LANGUAGE_CODE = 'en-us'
 
@@ -101,3 +106,9 @@ MEDIA_ROOT = 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.AppUser'
+
+LOGIN_URL = '/accounts/login'
+
+LOGIN_REDIRECT_URL = reverse_lazy('index')
+
+LOGOUT_REDIRECT_URL = reverse_lazy('index')

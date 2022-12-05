@@ -3,22 +3,22 @@
 {% block content %}
     <section class="container-fluid justify-content-center pt-10 pb-10">
         <div class="container-sm justify-content-center">
-            <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'register' %}" method="post">
+            <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'login' %}" method="post">
                 {% for field in form %}
                     <div class="container-fluid">
                         <label class="row justify-content-center col-form-label"
                                for="{{ field.name }}">{{ field.label }}</label>
                         {{ field }}
-                        {% if field.errors %}
-                            <div class="invalid-feedback">{{ field.errors }}</div>
-                        {% endif %}
                     </div>
                 {% endfor %}
+                {% if form.non_field_errors %}
+                    <div class="invalid-feedback">{{ form.non_field_errors }}</div>
+                {% endif %}
                 <div class="container-fluid">
-                    <input type="submit" class="btn btn-primary form-control" value="Register">
+                    <input type="submit" class="btn btn-primary form-control" value="Login">
                 </div>
                 <div class="row container-fluid">
-                    <p>Already have account? <a href="{% url 'login' %}">Sign-In!</a></p>
+                    <p>Don't have account? <a href="{% url 'register' %}">Sign-Up!</a></p>
                 </div>
                 {% csrf_token %}
             </form>
