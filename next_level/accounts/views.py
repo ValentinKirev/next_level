@@ -74,6 +74,14 @@ class ProfileDeleteView(DeleteView):
 
     def get(self, request, *args, **kwargs):
         user = self.get_object().user
+        news_posts = user.newspost_set.all()
+        user.profile.delete()
+
+        for news_post in news_posts:
+            news_post.comment_set.all().delete()
+            news_post.like_set.all().delete()
+
+        news_posts.delete()
         user.delete()
 
         return HttpResponseRedirect(self.success_url)

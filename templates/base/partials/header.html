@@ -21,13 +21,13 @@
                             News
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item " href="#">View News</a></li>
-                            <li><a class="dropdown-item " href="#">Add News</a></li>
+                            <li><a class="dropdown-item " href="{% url 'news list' %}">View News</a></li>
+                            <li><a class="dropdown-item " href="{% url 'news add' %}">Add News</a></li>
                         </ul>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">News</a>
+                        <a class="nav-link" href="{% url 'news list' %}">News</a>
                     </li>
                 {% endif %}
                 {% if request.user.is_authenticated %}

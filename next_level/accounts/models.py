@@ -141,7 +141,7 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(
-        AppUser, on_delete=models.CASCADE
+        AppUser, on_delete=models.RESTRICT
     )
 
     @property

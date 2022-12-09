@@ -71,10 +71,10 @@
                     </div>
                 {% endif %}
                 <div class="row mb-sm-2">
-                    <div class="container-fluid">
+                    <div class="container-fluid text-center">
                         {% if request.user == object.user %}
                             <a href="{% url 'profile edit' pk=object.pk %}" class="btn btn-primary p-sm-2 m-sm-2">Edit
-                                profile</a>
+                                Profile</a>
                             <button type="button" class="btn btn-danger p-sm-2 m-sm-2" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
                                 Delete profile
@@ -102,7 +102,7 @@
                                             </button>
                                             <a href="{% url 'profile delete' pk=object.pk %}"
                                                class="btn btn-danger p-sm-2 m-sm-2">Delete
-                                                profile</a>
+                                                Profile</a>
                                         </div>
                                     </div>
                                 </div>

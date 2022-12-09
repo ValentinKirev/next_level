@@ -1,57 +1,65 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 
+UserModel = get_user_model()
 
-# class NewsPost(models.Model):
-#     MAX_TITLE_LENGTH = 100
-#     MAX_SUBTITLE_LENGTH = 100
-#
-#     title = models.CharField(
-#         max_length=MAX_TITLE_LENGTH,
-#         null=False,
-#         blank=False
-#     )
-#
-#     subtitle = models.CharField(
-#         max_length=MAX_SUBTITLE_LENGTH,
-#         null=True,
-#         blank=True
-#     )
-#
-#     # author = models.CharField(
-#     #     max_length=30,
-#     #     null=False,
-#     #     blank=True
-#     # )
-#
-#     publication_date_and_time = models.DateTimeField(
-#         auto_now_add=True,
-#         null=False,
-#         blank=True
-#     )
-#
-#     description = models.TextField(
-#         null=False,
-#         blank=True
-#     )
-#
-#     media = models.FileField(
-#         upload_to='news_post',
-#         null=False,
-#         blank=True
-#     )
-#
-#     slug = models.SlugField(
-#         unique=True,
-#         null=False,
-#         blank=True
-#     )
-#
-#     def save(self, *args, **kwargs):
-#         super().save(*args, **kwargs)
-#
-#         if not self.slug:
-#             self.slug = slugify(f"{self.title}-{self.id}")
-#
-#         return super().save(*args, **kwargs)
+
+class NewsPost(models.Model):
+    MAX_TITLE_LENGTH = 200
+    MAX_SUBTITLE_LENGTH = 200
+
+    title = models.CharField(
+        max_length=MAX_TITLE_LENGTH,
+        null=False,
+        blank=False
+    )
+
+    subtitle = models.CharField(
+        max_length=MAX_SUBTITLE_LENGTH,
+        null=True,
+        blank=True
+    )
+
+    publication_date_and_time = models.DateTimeField(
+        auto_now_add=True,
+        null=False,
+        blank=True
+    )
+
+    description = models.TextField(
+        null=False,
+        blank=False
+    )
+
+    image = models.FileField(
+        upload_to='news_post',
+        null=False,
+        blank=False,
+    )
+
+    link_to_video = models.URLField(
+        null=True,
+        blank=True
+    )
+
+    slug = models.SlugField(
+        max_length=255,
+        unique=True,
+        null=False,
+        blank=True
+    )
+
+    author = models.ForeignKey(
+        UserModel,
+        on_delete=models.RESTRICT
+    )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if not self.slug:
+            self.slug = slugify(f"{self.title}-{self.id}")
+
+        return super().save(*args, **kwargs)
