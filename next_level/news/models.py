@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
+from embed_video.fields import EmbedVideoField
 
 UserModel = get_user_model()
 
@@ -39,7 +40,7 @@ class NewsPost(models.Model):
         blank=False,
     )
 
-    link_to_video = models.URLField(
+    link_to_video = EmbedVideoField(
         null=True,
         blank=True
     )

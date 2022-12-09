@@ -38,13 +38,13 @@
                             Games
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item " href="#">View Games</a></li>
-                            <li><a class="dropdown-item " href="#">Add Game</a></li>
+                            <li><a class="dropdown-item " href="{% url 'games list' %}">View Games</a></li>
+                            <li><a class="dropdown-item " href="{% url 'game add' %}">Add Game</a></li>
                         </ul>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Games</a>
+                        <a class="nav-link" href="{% url 'games list' %}">Games</a>
                     </li>
                 {% endif %}
                 {% if request.user.is_authenticated %}

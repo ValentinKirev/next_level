@@ -18,9 +18,22 @@ class BaseGameForm(forms.ModelForm, FormControlClassMixin, FormSelectClassMixin)
         labels = {
             'release_date': 'Release Date',
             'max_level': 'Max Level',
+            'trailer': 'URL to Trailer',
             'official_website': 'Official Website'
+        }
+
+        widgets = {
+            'release_date': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                }
+            ),
         }
 
 
 class GameCreateForm(BaseGameForm):
+    pass
+
+
+class GameEditForm(BaseGameForm):
     pass

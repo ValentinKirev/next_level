@@ -1,0 +1,50 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+{#    <section class="container-fluid justify-content-center pt-5 pb-10">#}
+{#        <div class="container w-50 justify-content-center">#}
+{#            <form class="col-lg-4 offset-lg-4 container-fluid" action="{% url 'news list' %}" method="get">#}
+{#                <div class="input-group mb-3">#}
+{#                    {% for field in form %}#}
+{#                        {{ field }}#}
+{#                        <input class="input-group-text btn-primary" type="submit" id="basic-addon2" value="Search">#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </form>#}
+{#        </div>#}
+{#        {% if not newspost_list %}#}
+{#            <h3 class="p-3">No news yet!</h3>#}
+{#        {% endif %}#}
+{#    </section>#}
+{#    {% if newspost_list %}#}
+{#        <section class="container-fluid justify-content-center">#}
+{#            {% include 'base/partials/paginator.html' %}#}
+{#        </section>#}
+{#    {% endif %}#}
+    <section class="container-fluid justify-content-center pt-10 pb-10">
+        <div class="container w-50 justify-content-center">
+            {% for game in game_list %}
+                <div class="card mb-3">
+                    <img src="{{ game.image.url }}" class="card-img-top" alt="image-cap">
+                    <div class="card-body">
+                        <h5>
+                            <a href="{% url 'game details' slug=game.slug %}"
+                               class="card-title">{{ game.title }}</a>
+                        </h5>
+                        <p class="card-text">Released on {{ game.release_date }} by {{ game.developer }}</p>
+                        <h4 class="card-text"><a href="{{ game.official_website }}">Official Website</a></h4>
+                        <p class="card-text"><small class="text-muted">
+                            Added on {{ game.publication_date_and_time }} by
+                            <a href="{% url 'profile details' pk=game.author.profile.pk %}">{{ game.author }}</a></small>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{#    {% if newspost_list %}#}
+{#        <section class="container-fluid justify-content-center pb-10">#}
+{#            {% include 'base/partials/paginator.html' %}#}
+{#        </section>#}
+{#    {% endif %}#}
+{% endblock %}

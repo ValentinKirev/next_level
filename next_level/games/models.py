@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.text import slugify
+from  embed_video.fields  import  EmbedVideoField
 
 UserModel = get_user_model()
 
@@ -69,7 +70,7 @@ class Game(models.Model):
         blank=False
     )
 
-    trailer = models.URLField(
+    trailer = EmbedVideoField(
         null=False,
         blank=False
     )

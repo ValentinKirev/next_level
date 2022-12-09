@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load embed_video_tags %}
 
 {% block content %}
     <section class="container-fluid justify-content-center pt-10 pb-10">
@@ -15,8 +16,8 @@
                         <h4 class="card-text text-center">{{ object.subtitle }}</h4>
                         <p class="card-text text-center">{{ object.description }}</p>
                         {% if object.link_to_video %}
-                            <p class="card-text text-center p-1">
-                                <a href="{{ object.link_to_video }}">Follow this link for video</a>
+                            <p class="text-center p-3 ratio ratio-16x9">
+                                {% video object.link_to_video 'tiny' %}
                             </p>
                         {% endif %}
                     </div>

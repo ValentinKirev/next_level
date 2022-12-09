@@ -72,13 +72,13 @@ class NewsEditView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('news details', kwargs={
-            'pk': self.object.id
+            'slug': self.object.slug
         })
 
 
 class NewsDeleteView(DeleteView):
     model = NewsPost
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('news list')
 
     def get(self, request, *args, **kwargs):
         news_post = self.get_object()

@@ -118,6 +118,14 @@ main {
 h4 span {
     color: #00ADF0;
 }
+.video_div{
+  margin-left: -210px;
+}
+@media (max-width:1199px){
+  .video_div{
+    margin-left: -270px;
+  }
+}
 
 h5 a:hover {
    color: white;

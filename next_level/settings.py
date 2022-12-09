@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'embed_video',
+
     'next_level.news',
     'next_level.games',
     'next_level.guides',
