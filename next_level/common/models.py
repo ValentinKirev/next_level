@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from next_level.games.models import Game
 from next_level.news.models import NewsPost
 
 UserModel = get_user_model()
@@ -41,4 +42,22 @@ class Like(models.Model):
     author = models.ForeignKey(
         UserModel,
         on_delete=models.RESTRICT
+    )
+
+
+class Rating(models.Model):
+    user = models.ForeignKey(
+        UserModel,
+        on_delete=models.RESTRICT
+    )
+
+    game = models.ForeignKey(
+        Game,
+        on_delete=models.RESTRICT
+    )
+
+    rating = models.IntegerField(
+        default=0,
+        null=False,
+        blank=False
     )

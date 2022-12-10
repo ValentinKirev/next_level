@@ -33,18 +33,10 @@
                                             class="display-26 text-primary me-2 font-weight-600">Max Level:</span>
                                         {{ object.max_level }}
                                     </li>
-                                    {% if object.country %}
-                                        <li class="mb-2 mb-xl-3 display-28"><span
-                                                class="display-26 text-primary me-2 font-weight-600">Country:</span>
-                                            {{ object.country }}
-                                        </li>
-                                    {% endif %}
-                                    {% if object.city %}
-                                        <li class="display-28"><span
-                                                class="display-26 text-primary me-2 font-weight-600">City:</span>
-                                            {{ object.city }}
-                                        </li>
-                                    {% endif %}
+                                    <li class="mb-2 mb-xl-3 display-28"><span
+                                            class="display-26 text-primary me-2 font-weight-600">Average Rating:</span>
+                                        {{ object.average_rating }} / 5 ({{ rates_count }} rates)
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -61,6 +53,43 @@
                 </div>
                 <div class="row mb-sm-2">
                     <div class="container-fluid text-center">
+                        <form action="{% url 'rate' object.slug %}" method="post">
+                            <div class="rate">
+                                <input type="submit" id="star5" name="rate" value="5">
+                                {% if user_rating < 5 %}
+                                    <label for="star5" title="text">5 stars</label>
+                                {% else %}
+                                    <label class="marked" for="star5" title="text">5 stars</label>
+                                {% endif %}
+                                <input type="submit" id="star4" name="rate" value="4">
+                                {% if user_rating < 4 %}
+                                    <label for="star4" title="text">4 stars</label>
+                                {% else %}
+                                    <label class="marked" for="star4" title="text">4 stars</label>
+                                {% endif %}
+                                <input type="submit" id="star3" name="rate" value="3">
+                                {% if user_rating < 3 %}
+                                    <label for="star3" title="text">3 stars</label>
+                                {% else %}
+                                    <label class="marked" for="star3" title="text">3 stars</label>
+                                {% endif %}
+                                <input type="submit" id="star2" name="rate" value="2">
+                                {% if user_rating < 2 %}
+                                    <label for="star2" title="text">2 stars</label>
+                                {% else %}
+                                    <label class="marked" for="star2" title="text">2 stars</label>
+                                {% endif %}
+                                <input type="submit" id="star1" name="rate" value="1">
+                                {% if user_rating < 1 %}
+                                    <label for="star1" title="text">1 star</label>
+                                {% else %}
+                                    <label class="marked" for="star1" title="text">1 star</label>
+                                {% endif %}
+                            </div>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                    <div class="container-fluid text-center">
                         <a class="btn btn-secondary p-sm-2 m-sm-2" href="{{ object.official_website }}">Play Now</a>
                         {% if request.user == object.author %}
                             <a href="{% url 'game edit' slug=object.slug %}" class="btn btn-primary p-sm-2 m-sm-2">Edit
@@ -69,16 +98,14 @@
                                     data-bs-target="#exampleModal">
                                 Delete Game
                             </button>
-                            <p class="card-text p-3"><small class="text-muted">
-                                Added on {{ game.publication_date_and_time }} by
-                                <a href="{% url 'profile details' pk=game.author.profile.pk %}">{{ game.author }}</a></small>
-                            </p>
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            <div class="modal fade" id="exampleModal" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel"
                                  aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you
+                                                want to
                                                 delete this game?</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -101,9 +128,14 @@
                                 </div>
                             </div>
                         {% endif %}
+                        <p class="card-text p-3"><small class="text-muted">
+                            Added on {{ game.publication_date_and_time }} by
+                            <a href="{% url 'profile details' pk=game.author.profile.pk %}">{{ game.author }}</a></small>
+                        </p>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 {% endblock %}

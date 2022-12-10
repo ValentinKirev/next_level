@@ -23,3 +23,18 @@ class CommentCreateForm(BaseCommentForm):
 
 class CommentEditForm(BaseCommentForm):
     pass
+
+
+class SearchForm(forms.Form, FormControlClassMixin):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].label = "Search"
+        self.set_form_control_class()
+
+    title = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Search by title',
+            }
+        )
+    )

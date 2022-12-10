@@ -13,7 +13,7 @@
             </form>
         </div>
         {% if not newspost_list %}
-            <h3 class="p-3">No news yet!</h3>
+            <h3 class="p-3">No results found!</h3>
         {% endif %}
     </section>
     {% if newspost_list %}
@@ -27,10 +27,10 @@
                 <div class="card mb-3">
                     <img src="{{ news_post.image.url }}" class="card-img-top" alt="image-cap">
                     <div class="card-body">
-                        <h5>
+                        <h4>
                             <a href="{% url 'news details' slug=news_post.slug %}"
                                class="card-title">{{ news_post.title }}</a>
-                        </h5>
+                        </h4>
                         <p class="card-text">{{ news_post.subtitle }}</p>
                         <p class="card-text"><small class="text-muted">
                             Added on {{ news_post.publication_date_and_time }} by

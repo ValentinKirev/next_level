@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.text import slugify
-from  embed_video.fields  import  EmbedVideoField
+from embed_video.fields import EmbedVideoField
+
 
 UserModel = get_user_model()
-
 
 class Game(models.Model):
     MAX_NAME_LENGTH = 50
@@ -104,6 +104,12 @@ class Game(models.Model):
         max_length=MAX_STATUS_CHOICES_LENGTH,
         choices=STATUS_CHOICES,
         default=PENDING,
+        null=False,
+        blank=False
+    )
+
+    average_rating = models.FloatField(
+        default=0,
         null=False,
         blank=False
     )

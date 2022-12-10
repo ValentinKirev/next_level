@@ -1,10 +1,13 @@
+import json
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, DeleteView
 
 from next_level.common.forms import CommentCreateForm, CommentEditForm
-from next_level.common.models import Comment, Like
+from next_level.common.models import Comment, Like, Rating
+from next_level.games.models import Game
 from next_level.news.models import NewsPost
 
 
@@ -76,5 +79,24 @@ class LikeView(View):
             like.save()
 
         success_url = self.get_success_url()
+
+        return HttpResponseRedirect(success_url)
+
+
+class RateView(View):
+
+    def post(self, request, *args, **kwargs):
+        body_unicode = request.body.decode('utf-8')
+        body = body_unicode.split('&')
+
+        game = Game.objects.get(slug=self.kwargs['slug'])
+        Rating.objects.filter(game=game, user=request.user).delete()
+        game.rating_set.create(user=request.user, rating=int(body[0][-1]))
+        game.average_rating = sum(rating.rating for rating in game.rating_set.all()) / game.rating_set.count() \
+            if game.rating_set.count() > 0 else 0
+        game.save()
+        success_url = reverse_lazy('game details', kwargs={
+            'slug': game.slug
+        })
 
         return HttpResponseRedirect(success_url)

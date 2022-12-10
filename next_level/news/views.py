@@ -2,8 +2,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
-from next_level.common.forms import CommentCreateForm
-from next_level.news.forms import NewsCreateForm, NewsSearchForm, NewsEditForm
+from next_level.common.forms import CommentCreateForm, SearchForm
+from next_level.news.forms import NewsCreateForm, NewsEditForm
 from next_level.news.models import NewsPost
 
 
@@ -24,7 +24,7 @@ class NewsList(ListView):
     template_name = 'news/news-list-page.html'
     paginate_by = 3
     queryset = NewsPost.objects.all().order_by('-id')
-    form_class = NewsSearchForm
+    form_class = SearchForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -45,7 +45,7 @@ class NewsAddView(CreateView):
     template_name = 'news/news-add-page.html'
     model = NewsPost
     form_class = NewsCreateForm
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('news list')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -61,7 +61,7 @@ class NewsDetailsView(DetailView):
 
         context['post_is_liked_by_user'] = self.object.like_set.filter(author_id=self.request.user.id)
         context['form'] = CommentCreateForm()
-        print(context['post_is_liked_by_user'])
+
         return context
 
 
