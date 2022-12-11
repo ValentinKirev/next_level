@@ -55,16 +55,28 @@
                             Guides
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item " href="#">View Guides</a></li>
-                            <li><a class="dropdown-item " href="#">Add Guide</a></li>
+                            <li><a class="dropdown-item " href="{% url 'guide category list' %}">View Guides</a></li>
+                            <li><a class="dropdown-item " href="{% url 'guide category add' %}">Add Guide Category</a>
+                            </li>
+                            <li><a class="dropdown-item " href="{% url 'guide post add' %}">Add Guide</a></li>
                         </ul>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Guides</a>
+                        <a class="nav-link" href="{% url 'guide category list' %}">Guides</a>
                     </li>
                 {% endif %}
             </ul>
+            {% if search_form %}
+                <form class="d-flex pt-4 justify-content-center" role="search">
+                    <div class="input-group mb-3">
+                        {% for field in search_form %}
+                            {{ field }}
+                            <input class="input-group-text btn-primary" type="submit" value="Search">
+                        {% endfor %}
+                    </div>
+                </form>
+            {% endif %}
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">

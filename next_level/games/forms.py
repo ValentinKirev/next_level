@@ -16,7 +16,7 @@ class BaseGameForm(forms.ModelForm, FormControlClassMixin, FormSelectClassMixin)
 
     class Meta:
         model = Game
-        exclude = ['author', 'publication_date_and_time', 'slug', 'status', 'average_rating']
+        exclude = ['author', 'publication_date_and_time', 'slug', 'status', 'average_rating', 'updated_on']
         labels = {
             'release_date': 'Release Date',
             'max_level': 'Max Level',
@@ -49,7 +49,7 @@ class FilterForm(forms.Form, FormControlClassMixin, FormSelectClassMixin):
         self.set_form_control_class()
         self.set_form_select_class()
 
-    DEFAULT=''
+    DEFAULT = ''
     MAX_LEVEL_ASCENDING = "Max Level " + html.unescape('&#8593;')
     MAX_LEVEL_DESCENDING = "Max Level " + html.unescape('&#8595;')
     RATING_ASCENDING = "Rating " + html.unescape('&#8593;')

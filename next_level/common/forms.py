@@ -32,6 +32,7 @@ class SearchForm(forms.Form, FormControlClassMixin):
         self.set_form_control_class()
 
     title = forms.CharField(
+        required=False,
         widget=forms.TextInput(
             attrs={
                 'placeholder': 'Search by title',

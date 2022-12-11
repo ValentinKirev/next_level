@@ -1,22 +1,14 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+    {% if not game_list %}
+         <section class="container-fluid justify-content-center pt-10 pb-10">
+            <div class="container w-50 justify-content-center">
+                <h3 class="p-3">No results found!</h3>
+            </div>
+        </section>
+    {% endif %}
     <section class="container-fluid justify-content-center pt-5 pb-5">
-        <div class="container w-50 justify-content-center">
-            <form class="col-lg-4 offset-lg-4 container-fluid" action="{% url 'games list' %}" method="get">
-                <div class="input-group mb-3">
-                    {% for field in form %}
-                        {{ field }}
-                        <input class="input-group-text btn-primary" type="submit" id="basic-addon2" value="Search">
-                    {% endfor %}
-                </div>
-            </form>
-        </div>
-        {% if not game_list %}
-            <h3 class="p-3">No results found!</h3>
-        {% endif %}
-    </section>
-       <section class="container-fluid justify-content-center pb-10">
         <div class="container-sm justify-content-center">
             <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'games list' %}" method="get">
                 {% for field in filter_form %}
@@ -52,9 +44,18 @@
                         </h4>
                         <p class="card-text">Released on {{ game.release_date }} by {{ game.developer }}</p>
                         <h6 class="card-text"><a href="{{ game.official_website }}">Official Website</a></h6>
-                        <p class="card-text"><small class="text-muted">
-                            Added on {{ game.publication_date_and_time }} by
-                            <a href="{% url 'profile details' pk=game.author.profile.pk %}">{{ game.author }}</a></small>
+                        <p class="card-text">
+                            {% if game.author %}
+                                <small class="text-muted">
+                                    Added on {{ game.publication_date_and_time }} by
+                                    <a href="{% url 'profile details' pk=game.author.profile.pk %}">{{ game.author }}</a>
+                                , last update on {{ game.updated_on }}
+                                </small>
+                            {% else %}
+                                <small class="text-muted">
+                                    Added on {{ game.publication_date_and_time }} by Unknown, last update on {{ game.updated_on }}
+                                </small>
+                            {% endif %}
                         </p>
                     </div>
                 </div>

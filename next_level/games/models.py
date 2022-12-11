@@ -6,6 +6,7 @@ from embed_video.fields import EmbedVideoField
 
 UserModel = get_user_model()
 
+
 class Game(models.Model):
     MAX_NAME_LENGTH = 50
     MAX_DEVELOPER_LENGTH = 50
@@ -34,6 +35,7 @@ class Game(models.Model):
 
     title = models.CharField(
         max_length=MAX_NAME_LENGTH,
+        unique=True,
         null=False,
         blank=False
     )
@@ -88,6 +90,12 @@ class Game(models.Model):
         blank=True
     )
 
+    updated_on = models.DateTimeField(
+        auto_now=True,
+        null=False,
+        blank=True
+    )
+
     slug = models.SlugField(
         max_length=255,
         unique=True,
@@ -97,7 +105,9 @@ class Game(models.Model):
 
     author = models.ForeignKey(
         UserModel,
-        on_delete=models.RESTRICT
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
 
     status = models.CharField(
@@ -113,6 +123,9 @@ class Game(models.Model):
         null=False,
         blank=False
     )
+
+    def __str__(self):
+        return self.title
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

@@ -13,6 +13,7 @@ class NewsPost(models.Model):
 
     title = models.CharField(
         max_length=MAX_TITLE_LENGTH,
+        unique=True,
         null=False,
         blank=False
     )
@@ -25,6 +26,12 @@ class NewsPost(models.Model):
 
     publication_date_and_time = models.DateTimeField(
         auto_now_add=True,
+        null=False,
+        blank=True
+    )
+
+    updated_on = models.DateTimeField(
+        auto_now=True,
         null=False,
         blank=True
     )
@@ -56,6 +63,9 @@ class NewsPost(models.Model):
         UserModel,
         on_delete=models.RESTRICT
     )
+
+    def __str__(self):
+        return self.title
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

@@ -1,16 +1,19 @@
 <ul class="pagination justify-content-center">
     {% if page_obj.number == 1 %}
         <li class="page-item">
-            <a href="?page=1{{ params }}" class="page-link disabled">&laquo;</a>
+            <a href="?page=1{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link disabled">&laquo;</a>
         </li>
     {% else %}
         <li class="page-item">
-            <a href="?page=1{{ params }}" class="page-link">&laquo;</a>
+            <a href="?page=1{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">&laquo;</a>
         </li>
     {% endif %}
     {% if page_obj.has_previous %}
         <li class="page-item">
-            <a href="?page={{ page_obj.previous_page_number }}{{ params }}" class="page-link">&lt;</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">&lt;</a>
         </li>
     {% else %}
         <li class="page-item disabled">
@@ -19,24 +22,29 @@
     {% endif %}
 
     {% if page_obj.number|add:'-1' > 1 %}
-        <li><a href="?page={{ page_obj.number|add:'-2' }}{{ params }}" class="page-link">&hellip;</a></li>
+        <li><a href="?page={{ page_obj.number|add:'-2' }}{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">&hellip;</a></li>
     {% endif %}
     {% for i in page_obj.paginator.page_range %}
         {% if i == page_obj.number %}
             <li class="page-item active" aria-current="page">
-                <a class="page-link" href="?page={{ page_obj.number }}{{ params }}">{{ page_obj.number }}</a>
+                <a class="page-link" href="?page={{ page_obj.number }}{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ page_obj.number }}</a>
             </li>
         {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
             <li class="page-item" aria-current="page">
-            <a class="page-link" href="?page={{ i }}{{ params }}">{{ i }}</a>
+            <a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a>
         {% endif %}
     {% endfor %}
     {% if page_obj.paginator.num_pages > page_obj.number|add:'1' %}
-        <li><a href="?page={{ page_obj.number|add:'2' }}{{ params }}" class="page-link">&hellip;</a></li>
+        <li><a href="?page={{ page_obj.number|add:'2' }}{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">&hellip;</a></li>
     {% endif %}
     {% if page_obj.has_next %}
         <li class="page-item">
-            <a href="?page={{ page_obj.next_page_number }}{{ params }}" class="page-link">&gt;</a>
+            <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">&gt;</a>
         </li>
     {% else %}
         <li class="page-item disabled">
@@ -45,11 +53,13 @@
     {% endif %}
     {% if page_obj.number == page_obj.paginator.num_pages %}
         <li class="page-item">
-            <a href="?page={{ page_obj.paginator.num_pages }}{{ params }}" class="page-link disabled">&raquo;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link disabled">&raquo;</a>
         </li>
     {% else %}
         <li class="page-item">
-            <a href="?page={{ page_obj.paginator.num_pages }}{{ params }}" class="page-link">&raquo;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}
+{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="page-link">&raquo;</a>
         </li>
     {% endif %}
 </ul>

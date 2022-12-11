@@ -1,14 +1,23 @@
-import json
-
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 
-from next_level.common.forms import CommentCreateForm, CommentEditForm
+from next_level.common.forms import CommentCreateForm, CommentEditForm, SearchForm
 from next_level.common.models import Comment, Like, Rating
 from next_level.games.models import Game
 from next_level.news.models import NewsPost
+
+
+class IndexView(ListView):
+    model = NewsPost
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['news'] = NewsPost.objects.all().order_by('-id')[:3]
+
+        return context
 
 
 class CommentAddView(CreateView):
@@ -27,7 +36,7 @@ class CommentAddView(CreateView):
 
 
 class CommentEditView(UpdateView):
-    template_name = 'common/comment-edit-page.html'
+    template_name = 'base/form-page.html'
     model = Comment
     form_class = CommentEditForm
 
@@ -35,6 +44,11 @@ class CommentEditView(UpdateView):
         context = super().get_context_data()
 
         context['post'] = NewsPost.objects.get(pk=self.object.to_news_post_id)
+        context['button'] = 'Save Changes'
+        context['url'] = reverse_lazy('comment edit', kwargs={
+            'slug': self.kwargs['slug'], 'pk': self.get_object().pk
+        })
+
         return context
 
     def get_success_url(self):

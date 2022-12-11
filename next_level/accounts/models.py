@@ -60,6 +60,9 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     objects = AppUserManager()
 
+    def __str__(self):
+        return self.username
+
 
 class Profile(models.Model):
     MALE = 'Male'
@@ -152,3 +155,6 @@ class Profile(models.Model):
             return self.first_name
         elif self.last_name is not None:
             return self.last_name
+
+    def __str__(self):
+        return self.get_full_name

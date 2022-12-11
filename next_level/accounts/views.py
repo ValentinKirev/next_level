@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, TemplateView
 
@@ -31,6 +30,7 @@ class SignUpView(CreateView):
         user.groups.add(group)
         login(self.request, user)
         self.object = user
+
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -75,13 +75,16 @@ class ProfileDeleteView(DeleteView):
     def get(self, request, *args, **kwargs):
         user = self.get_object().user
         news_posts = user.newspost_set.all()
-        user.profile.delete()
 
         for news_post in news_posts:
             news_post.comment_set.all().delete()
             news_post.like_set.all().delete()
 
         news_posts.delete()
+        user.guidepost_set.all().delete()
+        user.guidecategory_set.all().delete()
+        user.rating_set.all().delete()
+        user.profile.delete()
         user.delete()
 
         return HttpResponseRedirect(self.success_url)

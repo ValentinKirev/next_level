@@ -3,7 +3,8 @@
 {% block content %}
     <section class="container-fluid justify-content-center pt-10 pb-10">
         <div class="container-sm justify-content-center">
-            <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'game add' %}" method="post" enctype="multipart/form-data">
+            <form class="col-lg-8 offset-lg-2 container-fluid" action="{{ url }}"
+                  method="post" {% if media %} enctype="multipart/form-data" {% endif %}>
                 {% for field in form %}
                     <div class="container-fluid">
                         <label class="row justify-content-center col-form-label"
@@ -15,7 +16,8 @@
                     </div>
                 {% endfor %}
                 <div class="container-fluid">
-                    <input type="submit" class="btn btn-primary form-control" value="Add">
+                    <input type="submit" class="btn btn-primary form-control" {% if button %} value="{{ button }}"
+                    {% else %} value="Add" {% endif %}>
                 </div>
                 {% csrf_token %}
             </form>

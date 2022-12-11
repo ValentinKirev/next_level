@@ -11,7 +11,7 @@ class BaseNewsPostForm(forms.ModelForm, FormControlClassMixin):
 
     class Meta:
         model = NewsPost
-        exclude = ['author', 'publication_date_and_time', 'slug']
+        exclude = ['author', 'publication_date_and_time', 'slug', 'updated_on']
         labels = {
             'link_to_video': 'Link to Video'
         }

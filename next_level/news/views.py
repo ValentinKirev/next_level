@@ -7,45 +7,41 @@ from next_level.news.forms import NewsCreateForm, NewsEditForm
 from next_level.news.models import NewsPost
 
 
-class IndexView(ListView):
-    model = NewsPost
-    template_name = 'index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-
-        context['news'] = NewsPost.objects.all().order_by('-id')[:3]
-
-        return context
-
-
 class NewsList(ListView):
     model = NewsPost
     template_name = 'news/news-list-page.html'
     paginate_by = 3
-    queryset = NewsPost.objects.all().order_by('-id')
-    form_class = SearchForm
+    queryset = model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['form'] = self.form_class()
+
+        context['search_form'] = SearchForm(self.request.GET or None)
 
         return context
 
     def get_queryset(self):
         query = self.request.GET.get('title')
+
         if query:
-            object_list = self.model.objects.filter(title__icontains=query)
-        else:
-            object_list = self.queryset
-        return object_list
+            self.queryset = self.model.objects.filter(title__icontains=query)
+
+        return self.queryset
 
 
 class NewsAddView(CreateView):
-    template_name = 'news/news-add-page.html'
+    template_name = 'base/form-page.html'
     model = NewsPost
     form_class = NewsCreateForm
     success_url = reverse_lazy('news list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
+        context['media'] = True
+        context['url'] = reverse_lazy('news add')
+
+        return context
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -66,9 +62,20 @@ class NewsDetailsView(DetailView):
 
 
 class NewsEditView(UpdateView):
-    template_name = 'news/news-edit-page.html'
+    template_name = 'base/form-page.html'
     model = NewsPost
     form_class = NewsEditForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
+        context['media'] = True
+        context['url'] = reverse_lazy('news edit', kwargs={
+            'slug': self.object.slug
+        })
+        context['button'] = 'Save Changes'
+
+        return context
 
     def get_success_url(self):
         return reverse_lazy('news details', kwargs={

@@ -14,15 +14,13 @@ class GameListView(ListView):
     model = Game
     template_name = 'games/games-list-page.html'
     paginate_by = 3
-    queryset = Game.objects.all().order_by('-id')
-    form_class = SearchForm
-    params = ''
+    queryset = model.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['form'] = self.form_class()
-        context['filter_form'] = FilterForm()
-        context['params'] = self.params
+
+        context['search_form'] = SearchForm(self.request.GET or None)
+        context['filter_form'] = FilterForm(self.request.GET)
 
         return context
 
@@ -33,7 +31,6 @@ class GameListView(ListView):
 
         if search:
             self.queryset = self.model.objects.filter(title__icontains=search)
-            self.params += f'&title={search}'
 
         if sort_by:
             if sort_by == 'Max Level ' + html.unescape('&#8593;'):
@@ -49,11 +46,8 @@ class GameListView(ListView):
             elif sort_by == 'Release Date ' + html.unescape('&#8595;'):
                 self.queryset = self.model.objects.order_by('-release_date')
 
-            self.params += f'&sort_by={sort_by}'
-
         if filter_by:
             self.queryset = self.model.objects.filter(type=filter_by)
-            self.params += f'&filter_by={filter_by}'
 
         return self.queryset
 
@@ -61,8 +55,16 @@ class GameListView(ListView):
 class GameAddView(CreateView):
     model = Game
     form_class = GameCreateForm
-    template_name = 'games/game-add-page.html'
+    template_name = 'base/form-page.html'
     success_url = reverse_lazy('games list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
+        context['media'] = True
+        context['url'] = reverse_lazy('game add')
+
+        return context
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -97,7 +99,18 @@ class GameDetailsView(DetailView):
 class GameEditView(UpdateView):
     model = Game
     form_class = GameEditForm
-    template_name = 'games/game-edit-page.html'
+    template_name = 'base/form-page.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
+        context['media'] = True
+        context['url'] = reverse_lazy('game edit', kwargs={
+            'slug': self.object.slug
+        })
+        context['button'] = 'Save Changes'
+
+        return context
 
     def get_success_url(self):
         return reverse_lazy('game details', kwargs={

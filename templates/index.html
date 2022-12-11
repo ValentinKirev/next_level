@@ -9,9 +9,9 @@
         </h1>
         <h2 class="p-3">Dive into the vast world of the MMORPG games!</h2>
         {% if news %}
-            <h3 class="p-3">Latest news:</h3>
+            <h5 class="p-3 text-center">Latest news:</h5>
         {% else %}
-            <h3 class="p-3">No news yet!</h3>
+            <h5 class="p-3 text-center">No news yet!</h5>
         {% endif %}
     </section>
     <section class="container-fluid justify-content-center">
@@ -20,14 +20,15 @@
                 <div class="card mb-3">
                     <img src="{{ news_post.image.url }}" class="card-img-top" alt="image-cap">
                     <div class="card-body">
-                        <h5>
+                        <h4>
                             <a href="{% url 'news details' slug=news_post.slug %}"
                                class="card-title">{{ news_post.title }}</a>
-                        </h5>
+                        </h4>
                         <p class="card-text">{{ news_post.subtitle }}</p>
                         <p class="card-text"><small class="text-muted">
                             Added on {{ news_post.publication_date_and_time }} by
-                            <a href="{% url 'profile details' pk=news_post.author.profile.pk %}">{{ news_post.author }}</a></small>
+                            <a href="{% url 'profile details' pk=news_post.author.profile.pk %}">{{ news_post.author }}</a>
+                        , last update on {{ news_post.updated_on }}</small>
                         </p>
                     </div>
                 </div>
@@ -36,7 +37,7 @@
     </section>
     <section class="container-fluid justify-content-center pb-10">
         {% if news %}
-            <h3>See all news <a href="{% url 'news list' %}">here</a></h3>
+            <h5 class="text-center">See all news <a href="{% url 'news list' %}">here</a></h5>
         {% endif %}
     </section>
 {% endblock content %}

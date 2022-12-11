@@ -7,7 +7,8 @@
             <div class="card mb-3">
                 <h4 class="card-text text-center"><small class="text-muted">
                     Added on {{ object.publication_date_and_time }} by
-                    <a href="{% url 'profile details' pk=object.author.profile.pk %}">{{ object.author }}</a></small>
+                    <a href="{% url 'profile details' pk=object.author.profile.pk %}">{{ object.author }}</a>
+                    , last update on {{ object.updated_on }}</small>
                 </h4>
                 <img src="{{ object.image.url }}" title="" alt="image-cap">
                 <div class="card-title p-2">
@@ -24,7 +25,7 @@
                 </div>
                 <div class="row mb-sm-2">
                     <div class="container-fluid text-center">
-                        {% if not post_is_liked_by_user  %}
+                        {% if not post_is_liked_by_user %}
                             <a href="{% url 'like' slug=object.slug %}" class="p-5 p-sm-2 m-sm-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#00ADF0"
                                      class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
@@ -112,7 +113,8 @@
                                                     <p class="card-text">{{ comment.text }}</p>
                                                     <small class="text-muted">
                                                         Published on {{ comment.publication_date_and_time }} by
-                                                        <a href="{% url 'profile details' pk=comment.author.profile.pk %}">{{ comment.author }}</a></small>
+                                                        <a href="{% url 'profile details' pk=comment.author.profile.pk %}">{{ comment.author }}</a>,
+                                                        last update on {{ comment.updated_on }}</small>
                                                 </div>
                                             </div>
                                         {% endfor %}

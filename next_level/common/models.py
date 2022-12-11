@@ -22,6 +22,12 @@ class Comment(models.Model):
         blank=True
     )
 
+    updated_on = models.DateTimeField(
+        auto_now=True,
+        null=False,
+        blank=True
+    )
+
     to_news_post = models.ForeignKey(
         NewsPost,
         on_delete=models.RESTRICT
@@ -31,6 +37,9 @@ class Comment(models.Model):
         UserModel,
         on_delete=models.RESTRICT
     )
+
+    def __str__(self):
+        return self.text
 
 
 class Like(models.Model):
