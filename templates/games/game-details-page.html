@@ -37,6 +37,13 @@
                                             class="display-26 text-primary me-2 font-weight-600">Average Rating:</span>
                                         {{ object.average_rating }} / 5 ({{ rates_count }} rates)
                                     </li>
+                                    <li class="mb-2 mb-xl-3 display-28 text-center">
+                                        <span
+                                            class="display-26 text-primary me-2 font-weight-600">
+                                        <a href="{% url 'guide category list' game_slug=object.slug %}" class="btn btn-secondary">
+                                        View Guides</a>
+                                    </span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

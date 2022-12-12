@@ -40,6 +40,8 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item " href="{% url 'games list' %}">View Games</a></li>
                             <li><a class="dropdown-item " href="{% url 'game add' %}">Add Game</a></li>
+                            <li><a class="dropdown-item " href="{% url 'waiting approve' %}">Waiting For Approve</a>
+                            </li>
                         </ul>
                     </li>
                 {% else %}
@@ -47,25 +49,9 @@
                         <a class="nav-link" href="{% url 'games list' %}">Games</a>
                     </li>
                 {% endif %}
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                           href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Guides
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item " href="{% url 'guide category list' %}">View Guides</a></li>
-                            <li><a class="dropdown-item " href="{% url 'guide category add' %}">Add Guide Category</a>
-                            </li>
-                            <li><a class="dropdown-item " href="{% url 'guide post add' %}">Add Guide</a></li>
-                        </ul>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'guide category list' %}">Guides</a>
-                    </li>
-                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'guide select view' %}">Guides</a>
+                </li>
             </ul>
             {% if search_form %}
                 <form class="d-flex pt-4 justify-content-center" role="search">

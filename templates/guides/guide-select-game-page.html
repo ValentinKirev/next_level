@@ -7,10 +7,10 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h4>
-                            <a href="{% url 'guide posts list' category_slug=object.slug game_slug=game.slug %}"
+                            <a href="{% url 'guide category list' game_slug=game.slug %}"
                                class="card-title">{{ game.title }}</a>
                         </h4>
-                        <p class="card-text text-start">Guides for {{ game.title }} in {{ object.title }} category</p>
+                        <p class="card-text text-start">Guides for {{ game.title }} !</p>
                     </div>
                 </div>
             {% endfor %}

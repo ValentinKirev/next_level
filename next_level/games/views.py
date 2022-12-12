@@ -14,7 +14,7 @@ class GameListView(ListView):
     model = Game
     template_name = 'games/games-list-page.html'
     paginate_by = 3
-    queryset = model.objects.all().order_by('-id')
+    queryset = model.objects.filter(status='Approved').order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -68,6 +68,7 @@ class GameAddView(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+
         return super().form_valid(form)
 
 
@@ -125,6 +126,48 @@ class GameDeleteView(DeleteView):
     def get(self, request, *args, **kwargs):
         game = self.get_object()
         game.rating_set.all().delete()
+
+        categories = game.guidecategory_set.all()
+
+        for category in categories:
+            posts = category.guidepost_set.all()
+
+            for post in posts:
+                post.guides_like_set.all().delete()
+
+            posts.delete()
+
+        categories.delete()
         game.delete()
+
+        return HttpResponseRedirect(self.success_url)
+
+
+class GamesWaitingApproveListView(ListView):
+    model = Game
+    template_name = 'games/games-waiting-approve-page.html'
+    queryset = model.objects.filter(status='Pending').order_by('-id')
+
+
+class ApproveGameView(UpdateView):
+    model = Game
+    success_url = reverse_lazy('waiting approve')
+
+    def get(self, request, *args, **kwargs):
+        game = self.model.objects.get(slug=self.kwargs['slug'])
+        game.status = 'Approved'
+        game.save()
+
+        return HttpResponseRedirect(self.success_url)
+
+
+class RejectGameView(UpdateView):
+    model = Game
+    success_url = reverse_lazy('waiting approve')
+
+    def get(self, request, *args, **kwargs):
+        game = self.model.objects.get(slug=self.kwargs['slug'])
+        game.status = 'Rejected'
+        game.save()
 
         return HttpResponseRedirect(self.success_url)

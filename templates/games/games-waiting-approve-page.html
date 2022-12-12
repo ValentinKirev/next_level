@@ -1,0 +1,71 @@
+{% extends 'base/base.html' %}
+{% load embed_video_tags %}
+{% load static %}
+
+{% block content %}
+    {% if not game_list %}
+         <section class="container-fluid justify-content-center pt-10 pb-10">
+            <div class="container w-50 justify-content-center">
+                <h3 class="p-3">No Games waiting for approve!</h3>
+            </div>
+        </section>
+    {% endif %}
+    {% for game in game_list %}
+        <section class="container-fluid justify-content-center pt-5 pb-5">
+            <div class="container-xl w-50 justify-content-center">
+                <div class="row">
+                    <div class="col-lg-12 mb-4 mb-sm-5">
+                        <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <img src="{{ game.image.url }}" class="img-fluid" alt="profile-img">
+                                </div>
+                                <div class="col-lg-6 px-xl-10">
+                                    <div class="display-26 text-primary me-2 font-weight-600">
+                                        <h3 class="h2 text-primary">{{ game.title }}</h3>
+                                    </div>
+                                    <ul class="list-unstyled mb-1-9">
+                                        <li class="mb-2 mb-xl-3 display-28"><span
+                                                class="display-26 text-primary me-2 font-weight-600">Developer:</span>
+                                            {{ game.developer }}
+                                        </li>
+                                        <li class="mb-2 mb-xl-3 display-28"><span
+                                                class="display-26 text-primary me-2 font-weight-600">Release Date:</span>
+                                            {{ game.release_date }}
+                                        </li>
+                                        <li class="mb-2 mb-xl-3 display-28"><span
+                                                class="display-26 text-primary me-2 font-weight-600">Type:</span>
+                                            {{ game.type }}
+                                        </li>
+                                        <li class="mb-2 mb-xl-3 display-28"><span
+                                                class="display-26 text-primary me-2 font-weight-600">Max Level:</span>
+                                            {{ game.max_level }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mb-4 mb-sm-5">
+                        <div>
+                            <h5 class="section-title text-primary mb-3 mb-sm-4">Description:</h5>
+                            <p class="justify-content-center">{{ game.description }}</p>
+                        </div>
+                        <div class="text-center p-3 ratio ratio-16x9">
+                            {% video game.trailer 'tiny' %}
+                        </div>
+                        <h5 class="pt-3">
+                            <a href="{{ game.official_website }}">Official website</a>
+                        </h5>
+                    </div>
+                    <div class="row mb-sm-2">
+                        <div class="container-fluid text-center">
+                            <a href="{% url 'approved' slug=game.slug %}" class="btn btn-primary p-sm-2 m-sm-2">Approve</a>
+                            <a href="{% url 'rejected' slug=game.slug %}" class="btn btn-danger p-sm-2 m-sm-2">Reject</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+{% endblock %}

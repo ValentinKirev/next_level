@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -6,6 +7,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from next_level.common.forms import CommentCreateForm, CommentEditForm, SearchForm
 from next_level.common.models import Comment, Like, Rating
 from next_level.games.models import Game
+from next_level.guides.models import GuidePost
 from next_level.news.models import NewsPost
 
 
@@ -75,24 +77,41 @@ class CommentDeleteView(DeleteView):
 class LikeView(View):
     model = Like
 
-    def get_success_url(self):
-        return reverse_lazy('news details', kwargs={
-            'slug': self.kwargs['slug'],
-        })
-
     def get(self, request, *args, **kwargs):
+        news_post = None
+        liked_news_post = None
+        guide_post = None
+        liked_guide_post = None
 
-        news_post = NewsPost.objects.get(slug=self.kwargs['slug'])
-        liked_object = Like.objects.filter(to_news_post_id=news_post.id, author=request.user) \
-            .first()
+        try:
+            news_post = NewsPost.objects.get(slug=self.kwargs['slug'])
+            liked_news_post = Like.objects.filter(to_news_post_id=news_post.id, author=request.user) \
+                .first()
+        except ObjectDoesNotExist:
+            guide_post = GuidePost.objects.get(slug=self.kwargs['slug'])
+            liked_guide_post = Like.objects.filter(to_guide_post=guide_post.id, author=request.user) \
+                .first()
 
-        if liked_object:
-            liked_object.delete()
+        if news_post is not None:
+            if liked_news_post:
+                liked_news_post.delete()
+            else:
+                like = Like(to_news_post=news_post, author=request.user)
+                like.save()
+            success_url = reverse_lazy('news details', kwargs={
+                'slug': self.kwargs['slug'],
+            })
         else:
-            like = Like(to_news_post=news_post, author=request.user)
-            like.save()
-
-        success_url = self.get_success_url()
+            if liked_guide_post:
+                liked_guide_post.delete()
+            else:
+                like = Like(to_guide_post=guide_post, author=request.user)
+                like.save()
+            success_url = reverse_lazy('guide post details', kwargs={
+                'game_slug': guide_post.to_category.to_game.slug,
+                'category_slug': guide_post.to_category.slug,
+                'slug': self.kwargs['slug'],
+            })
 
         return HttpResponseRedirect(success_url)
 

@@ -2,32 +2,32 @@
 
 {% block content %}
     {% if not game_list %}
-         <section class="container-fluid justify-content-center pt-10 pb-10">
+        <section class="container-fluid justify-content-center pt-10 pb-10">
             <div class="container w-50 justify-content-center">
                 <h3 class="p-3">No results found!</h3>
             </div>
         </section>
     {% endif %}
-    <section class="container-fluid justify-content-center pt-5 pb-5">
-        <div class="container-sm justify-content-center">
-            <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'games list' %}" method="get">
-                {% for field in filter_form %}
-                    <div class="container-fluid">
-                        <label class="row justify-content-center col-form-label"
-                               for="{{ field.name }}">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="invalid-feedback">{{ field.errors }}</div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                <div class="container-fluid">
-                    <input type="submit" class="btn btn-primary form-control" value="Filter">
-                </div>
-            </form>
-        </div>
-    </section>
     {% if game_list %}
+        <section class="container-fluid justify-content-center pt-5 pb-5">
+            <div class="container-sm justify-content-center">
+                <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'games list' %}" method="get">
+                    {% for field in filter_form %}
+                        <div class="container-fluid">
+                            <label class="row justify-content-center col-form-label"
+                                   for="{{ field.name }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="invalid-feedback">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <div class="container-fluid">
+                        <input type="submit" class="btn btn-primary form-control" value="Filter">
+                    </div>
+                </form>
+            </div>
+        </section>
         <section class="container-fluid justify-content-center">
             {% include 'base/partials/paginator.html' %}
         </section>
@@ -49,11 +49,12 @@
                                 <small class="text-muted">
                                     Added on {{ game.publication_date_and_time }} by
                                     <a href="{% url 'profile details' pk=game.author.profile.pk %}">{{ game.author }}</a>
-                                , last update on {{ game.updated_on }}
+                                    , last update on {{ game.updated_on }}
                                 </small>
                             {% else %}
                                 <small class="text-muted">
-                                    Added on {{ game.publication_date_and_time }} by Unknown, last update on {{ game.updated_on }}
+                                    Added on {{ game.publication_date_and_time }} by Unknown, last update
+                                    on {{ game.updated_on }}
                                 </small>
                             {% endif %}
                         </p>

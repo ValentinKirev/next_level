@@ -39,6 +39,11 @@ class GuideCategory(models.Model):
         on_delete=models.RESTRICT
     )
 
+    to_game = models.ForeignKey(
+        Game,
+        on_delete=models.RESTRICT
+    )
+
     slug = models.SlugField(
         max_length=255,
         unique=True,
@@ -95,11 +100,6 @@ class GuidePost(models.Model):
         on_delete=models.RESTRICT
     )
 
-    to_game = models.ForeignKey(
-        Game,
-        on_delete=models.RESTRICT
-    )
-
     slug = models.SlugField(
         max_length=255,
         unique=True,
@@ -111,6 +111,6 @@ class GuidePost(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            self.slug = slugify(f"{self.title}-{self.id}")
+            self.slug = slugify(f"{self.title}{self.id}")
 
         return super().save(*args, **kwargs)

@@ -1,18 +1,35 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+    {% if not guidepost_list %}
+        <section class="container-fluid justify-content-center pt-10">
+            <div class="container w-50 justify-content-center">
+                <h3 class="p-3">No guides yet!</h3>
+            </div>
+        </section>
+    {% endif %}
     <section class="container-fluid justify-content-center pt-10 pb-10">
-        <div class="container w-50 justify-content-center">
-            {% for post in guidepost_list %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h4>
-                            <a href="#"
-                               class="card-title">{{ post.title }}</a>
-                        </h4>
-                    </div>
+        <div class="container w-75 justify-content-center">
+            <div class="card mb-5 align-items-center">
+                <a class="btn btn-secondary w-25" href="{{ add_url }}">Add Guide</a>
+                <div class="container-fluid text-center w-75">
+                    {% for post in guidepost_list %}
+                        <div class="card mb-3">
+                            <div class="card-body text-start">
+                                <h4>
+                                    <a href="{% url 'guide post details' game_slug=post.to_category.to_game.slug category_slug=post.to_category.slug slug=post.slug %}"
+                                       class="card-title">{{ post.title }}</a>
+                                </h4>
+                                <p class="card-text"><small class="text-muted">
+                                    Added on {{ post.publication_date_and_time }} by
+                                    <a href="{% url 'profile details' pk=post.author.profile.pk %}">{{ post.author }}</a>
+                                    , last update on {{ post.updated_on }}</small>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+            </div>
         </div>
     </section>
 {% endblock %}
