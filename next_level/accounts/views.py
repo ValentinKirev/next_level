@@ -101,11 +101,22 @@ class ProfileDeleteView(PermissionRequiredMixin, UserOwnerMixin, DeleteView):
 
             categories.delete()
 
+        user_categories = user.guidecategory_set.all()
+
+        for category in user_categories:
+            posts = category.guidepost_set.all()
+
+            for post in posts:
+                post.guides_like_set.all().delete()
+
+            posts.delete()
+
         user_guides = user.guidepost_set.all()
 
         for guide in user_guides:
             guide.guides_like_set.all().delete()
 
+        user_categories.delete()
         user_guides.delete()
         user.rating_set.all().delete()
         user.like_set.all().delete()

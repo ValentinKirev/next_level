@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, TemplateView
 
-from next_level.common.forms import CommentCreateForm, CommentEditForm, SearchForm
+from next_level.common.forms import CommentCreateForm, CommentEditForm
 from next_level.common.models import Comment, Like, Rating
 from next_level.games.models import Game
 from next_level.guides.models import GuidePost
@@ -32,7 +32,10 @@ class AboutView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        context['developer'] = UserModel.objects.get(pk=1)
+        try:
+            context['developer'] = UserModel.objects.get(pk=111)
+        except ObjectDoesNotExist:
+            raise Http404
 
         return context
 
@@ -48,7 +51,12 @@ class CommentAddView(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.to_news_post = NewsPost.objects.get(slug=self.kwargs['slug'])
+
+        try:
+            form.instance.to_news_post = NewsPost.objects.get(slug=self.kwargs['slug'])
+        except ObjectDoesNotExist:
+            raise Http404
+
         return super().form_valid(form)
 
 
@@ -60,7 +68,11 @@ class CommentEditView(UserOwnerMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        context['post'] = NewsPost.objects.get(pk=self.object.to_news_post_id)
+        try:
+            context['post'] = NewsPost.objects.get(pk=self.object.to_news_post_id)
+        except ObjectDoesNotExist:
+            raise Http404
+
         context['button'] = 'Save Changes'
         context['url'] = reverse_lazy('comment edit', kwargs={
             'slug': self.kwargs['slug'], 'pk': self.get_object().pk
@@ -137,7 +149,11 @@ class RateView(View):
         body_unicode = request.body.decode('utf-8')
         body = body_unicode.split('&')
 
-        game = Game.objects.get(slug=self.kwargs['slug'])
+        try:
+            game = Game.objects.get(slug=self.kwargs['slug'])
+        except ObjectDoesNotExist:
+            raise Http404
+
         Rating.objects.filter(game=game, user=request.user).delete()
         game.rating_set.create(user=request.user, rating=int(body[0][-1]))
         game.average_rating = sum(rating.rating for rating in game.rating_set.all()) / game.rating_set.count() \

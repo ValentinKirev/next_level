@@ -2,7 +2,7 @@ import html
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
@@ -23,14 +23,14 @@ class GameListView(ListView):
         context = super().get_context_data()
 
         context['search_form'] = SearchForm(self.request.GET or None)
-        context['filter_form'] = FilterForm(self.request.GET)
+        context['filter_form'] = FilterForm(self.request.GET or None)
 
         return context
 
     def get_queryset(self):
-        search = self.request.GET.get('title')
-        sort_by = self.request.GET.get('sort_by')
-        filter_by = self.request.GET.get('filter_by')
+        search = self.request.GET.get('title', None)
+        sort_by = self.request.GET.get('sort_by', None)
+        filter_by = self.request.GET.get('filter_by', None)
 
         if search:
             self.queryset = self.model.objects.filter(title__icontains=search)
@@ -86,7 +86,11 @@ class GameDetailsView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        game = self.get_object()
+        try:
+            game = self.get_object()
+        except ObjectDoesNotExist:
+            raise Http404
+
         ratings = game.rating_set.all()
         rates_count = game.rating_set.count()
 
@@ -134,7 +138,11 @@ class GameDeleteView(PermissionRequiredMixin, UserOwnerMixin, DeleteView):
     permission_required = 'games.delete_game'
 
     def get(self, request, *args, **kwargs):
-        game = self.get_object()
+        try:
+            game = self.get_object()
+        except ObjectDoesNotExist:
+            raise Http404
+
         game.rating_set.all().delete()
 
         categories = game.guidecategory_set.all()

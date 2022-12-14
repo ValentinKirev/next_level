@@ -22,7 +22,7 @@ class NewsList(ListView):
         return context
 
     def get_queryset(self):
-        query = self.request.GET.get('title')
+        query = self.request.GET.get('title', None)
 
         if query:
             self.queryset = self.model.objects.filter(title__icontains=query)
@@ -98,3 +98,4 @@ class NewsDeleteView(PermissionRequiredMixin, DeleteView):
         news_post.delete()
 
         return HttpResponseRedirect(self.success_url)
+

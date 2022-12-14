@@ -1,0 +1,18 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        main {
+            background-image: url({% static '/images/internal-server-error.jpg'%});
+            padding-top: 5rem;
+            padding-bottom: 20rem;
+        }
+    </style>
+    <div class="container-fluid w-25 pt-10 pb-10">
+    <div class="card">
+        <h3>Sorry, we're having a problem, we're working on fixing it! Go play some MMORPG in the meantime!</h3>
+        <h3 class="error">Error 500 - Internal Server Error</h3>
+    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        main {
+            background-image: url({% static '/images/page-not-found.png'%});
+            padding-top: 5rem;
+            padding-bottom: 20rem;
+        }
+    </style>
+    <div class="container-fluid pt-10 pb-10">
+        <h3>{{ user }}, Looks like you've lost something, you won't find it here!</h3>
+        <h3><a href="{% url 'index' %}">Go Home!</a></h3>
+        <h3 class="error pb-5">Error 404 - Page Not Found</h3>
+    </div>
+{% endblock %}

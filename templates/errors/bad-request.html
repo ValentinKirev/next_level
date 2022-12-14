@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        main {
+            background-image: url({% static '/images/bad-request.jpg'%});
+            padding-top: 5rem;
+            padding-bottom: 20rem;
+        }
+    </style>
+    <div class="container-fluid pt-10 pb-10">
+        <h3>You didn't do well with the quest, you won't get a reward this time!</h3>
+        <h3><a href="{% url 'index' %}">Go Home!</a></h3>
+        <h3 class="error pb-5">Error 400 - Bad Request</h3>
+    </div>
+{% endblock %}

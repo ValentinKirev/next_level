@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        main {
+            background-image: url({% static '/images/forbidden.jpg'%});
+            padding-top: 5rem;
+            padding-bottom: 20rem;
+        }
+    </style>
+    <div class="container-fluid pt-10 pb-10">
+        <h3>{{ user }}, Looks like you're trying to cheat, better hurry and get out of here before guards comes!</h3>
+        <h3><a href="{% url 'index' %}">Go Home!</a></h3>
+        <h3 class="error pb-5">Error 403 - Forbidden</h3>
+    </div>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView, TemplateView
 
@@ -16,7 +17,10 @@ class GuideCategoryListView(ListView):
     template_name = 'guides/guide-categories-list-page.html'
 
     def get_queryset(self):
-        game = Game.objects.get(slug=self.kwargs['game_slug'])
+        try:
+            game = Game.objects.get(slug=self.kwargs['game_slug'])
+        except ObjectDoesNotExist:
+            raise Http404
         return self.model.objects.filter(to_game=game.id).order_by('-id')
 
     def get_context_data(self, **kwargs):
@@ -51,7 +55,12 @@ class GuideCategoryAddView(PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.to_game = Game.objects.get(slug=self.kwargs['game_slug'])
+
+        try:
+            form.instance.to_game = Game.objects.get(slug=self.kwargs['game_slug'])
+        except ObjectDoesNotExist:
+            raise Http404
+
         return super().form_valid(form)
 
 
@@ -62,7 +71,7 @@ class GuideSelectGameView(TemplateView):
         context = super().get_context_data()
         games = Game.objects.filter(status='Approved').order_by('-id')
 
-        query = self.request.GET.get('title')
+        query = self.request.GET.get('title', None)
 
         if query:
             games = Game.objects.filter(title__icontains=query)
@@ -107,7 +116,11 @@ class GuideCategoryDeleteView(PermissionRequiredMixin, DeleteView):
             'game_slug': self.kwargs['game_slug'],
         })
 
-        guide_category = self.get_object()
+        try:
+            guide_category = self.get_object()
+        except ObjectDoesNotExist:
+            raise Http404
+
         posts = guide_category.guidepost_set.all()
 
         for post in posts:
@@ -134,7 +147,11 @@ class GuidePostListView(ListView):
         return context
 
     def get_queryset(self):
-        category = GuideCategory.objects.get(slug=self.kwargs['category_slug'])
+        try:
+            category = GuideCategory.objects.get(slug=self.kwargs['category_slug'])
+        except ObjectDoesNotExist:
+            raise Http404
+
         self.queryset = self.model.objects.filter(to_category=category.id).order_by('-id')
 
         return self.queryset
@@ -158,7 +175,12 @@ class GuidePostAddView(PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.to_category = GuideCategory.objects.get(slug=self.kwargs['category_slug'])
+
+        try:
+            form.instance.to_category = GuideCategory.objects.get(slug=self.kwargs['category_slug'])
+        except ObjectDoesNotExist:
+            raise Http404
+
         return super().form_valid(form)
 
     def get_success_url(self):
