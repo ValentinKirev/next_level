@@ -15,10 +15,12 @@ class Game(models.Model):
 
     PAY_TO_PLAY = "Pay To Play"
     FREE_TO_PLAY = "Free To Play"
+    BUY_TO_PLAY = "Buy To Play"
 
     TYPE_CHOICES = [
         (PAY_TO_PLAY, PAY_TO_PLAY),
-        (FREE_TO_PLAY, FREE_TO_PLAY)
+        (FREE_TO_PLAY, FREE_TO_PLAY),
+        (BUY_TO_PLAY, BUY_TO_PLAY),
     ]
 
     MAX_TYPE_CHOICES_LENGTH = max(len(value) for (_, value) in TYPE_CHOICES)

@@ -5,7 +5,8 @@ from django.db import models
 from django.utils.text import slugify
 from embed_video.fields import EmbedVideoField
 
-from next_level.validators import validate_all_characters_is_alphanumeric, validate_image_sile_less_than_5mb
+from next_level.validators import validate_image_sile_less_than_5mb, \
+    validate_post_title_contains_only_allowed_characters
 
 UserModel = get_user_model()
 
@@ -17,7 +18,7 @@ class NewsPost(models.Model):
     title = models.CharField(
         max_length=MAX_TITLE_LENGTH,
         validators=(
-            validate_all_characters_is_alphanumeric,
+            validate_post_title_contains_only_allowed_characters,
             MinLengthValidator(2),
         ),
         unique=True,
@@ -28,7 +29,7 @@ class NewsPost(models.Model):
     subtitle = models.CharField(
         max_length=MAX_SUBTITLE_LENGTH,
         validators=(
-            validate_all_characters_is_alphanumeric,
+            validate_post_title_contains_only_allowed_characters,
             MinLengthValidator(2),
         ),
         null=True,

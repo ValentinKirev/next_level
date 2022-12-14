@@ -69,11 +69,13 @@ class FilterForm(forms.Form, FormControlClassMixin, FormSelectClassMixin):
 
     FREE_TO_PLAY = 'Free To Play'
     PAY_TO_PLAY = 'Pay To Play'
+    BUY_TO_PLAY = "Buy To Play"
 
     FILTER_CHOICES = [
         (DEFAULT, DEFAULT),
         (FREE_TO_PLAY, FREE_TO_PLAY),
         (PAY_TO_PLAY, PAY_TO_PLAY),
+        (BUY_TO_PLAY, BUY_TO_PLAY),
     ]
 
     sort_by = forms.ChoiceField(

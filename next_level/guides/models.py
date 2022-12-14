@@ -4,7 +4,8 @@ from django.db import models
 from django.utils.text import slugify
 
 from next_level.games.models import Game
-from next_level.validators import validate_all_characters_is_alphanumeric, validate_image_sile_less_than_5mb
+from next_level.validators import validate_image_sile_less_than_5mb, \
+    validate_post_title_contains_only_allowed_characters
 
 UserModel = get_user_model()
 
@@ -18,7 +19,7 @@ class GuideCategory(models.Model):
     title = models.CharField(
         max_length=MAX_TITLE_LENGTH,
         validators=(
-            validate_all_characters_is_alphanumeric,
+            validate_post_title_contains_only_allowed_characters,
             MinLengthValidator(2)
         ),
         null=False,
@@ -77,7 +78,7 @@ class GuidePost(models.Model):
     title = models.CharField(
         max_length=MAX_TITLE_LENGTH,
         validators=(
-            validate_all_characters_is_alphanumeric,
+            validate_post_title_contains_only_allowed_characters,
             MinLengthValidator(2)
         ),
         null=False,

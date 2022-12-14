@@ -12,7 +12,9 @@
                         <h4 class="card-text text-center p-3">In category: {{ object.to_category.title }}</h4>
                         <p class="card-text text-center p-3">{{ object.description }}</p>
                         {% if object.image %}
-                            <img src="{{ object.image.url }}" class="img-fluid" alt="profile-img">
+                            <div class="row align-items-center">
+                                <img src="{{ object.image.url }}" class="img-fluid" alt="guide-img">
+                            </div>
                         {% endif %}
                     </div>
                 </div>

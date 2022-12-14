@@ -7,6 +7,14 @@ def validate_all_characters_is_alphanumeric(value):
             raise ValidationError('Title must contain only letters and digits!')
 
 
+def validate_post_title_contains_only_allowed_characters(value):
+    allowed_characters = [',', '-', '(', ')', "'"]
+
+    for ch in value:
+        if not ch.isalnum() and ch != ' ' and ch not in allowed_characters:
+            raise ValidationError("Title must contain only letters and digits or any of these symbols ,-()'")
+
+
 def validate_username_contains_allowed_characters(value):
 
     for character in value:

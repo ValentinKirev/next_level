@@ -166,6 +166,7 @@ class GuidePostAddView(PermissionRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
+        context['media'] = True
         context['url'] = reverse_lazy('guide post add', kwargs={
             'game_slug': self.kwargs['game_slug'],
             'category_slug': self.kwargs['category_slug'],
@@ -218,6 +219,7 @@ class GuidePostEditView(PermissionRequiredMixin, UserOwnerMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
+        context['media'] = True
         context['url'] = reverse_lazy('guide post edit', kwargs={
             'game_slug': self.kwargs['game_slug'],
             'category_slug': self.kwargs['category_slug'],
