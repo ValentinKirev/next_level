@@ -5,7 +5,7 @@ from django.db import models
 from django_countries.data import COUNTRIES
 
 from next_level.accounts.managers import AppUserManager
-from next_level.accounts.validators import validate_username_contains_allowed_characters, \
+from next_level.validators import validate_username_contains_allowed_characters, \
     validate_names_contain_only_letters, validate_image_sile_less_than_5mb
 
 
@@ -157,4 +157,7 @@ class Profile(models.Model):
             return self.last_name
 
     def __str__(self):
-        return self.get_full_name
+        full_name = self.get_full_name
+        if full_name:
+            return full_name
+        return self.user.username

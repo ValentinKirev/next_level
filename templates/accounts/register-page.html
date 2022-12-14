@@ -3,7 +3,7 @@
 {% block content %}
     <section class="container-fluid justify-content-center pt-10 pb-10">
         <div class="container-sm justify-content-center">
-            <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'register' %}" method="post">
+            <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'register' %}" method="post" id="form">
                 {% for field in form %}
                     <div class="container-fluid">
                         <label class="row justify-content-center col-form-label"
@@ -15,7 +15,7 @@
                     </div>
                 {% endfor %}
                 <div class="container-fluid">
-                    <input type="submit" class="btn btn-primary form-control" value="Register">
+                    <input type="submit" class="btn btn-primary form-control" value="Register" id="submitBtn" onclick="disableSubmitButton()">
                 </div>
                 <div class="row container-fluid">
                     <p>Already have account? <a href="{% url 'login' %}">Sign-In!</a></p>
@@ -24,4 +24,24 @@
             </form>
         </div>
     </section>
+    <script>
+        function disableSubmitButton() {
+            let form = document.getElementById('form');
+            let formElements = Array.from(form.elements)
+            let formValid = true
+
+            for (let element of formElements) {
+                if (element.required && element.value === '') {
+                    formValid = false;
+                    break;
+                }
+            }
+
+            document.getElementById('submitBtn').onclick = function () {
+                if (formValid) {
+                    document.getElementById("submitBtn").disabled = "true";
+                }
+            }
+        }
+    </script>
 {% endblock %}

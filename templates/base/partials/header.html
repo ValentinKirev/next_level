@@ -13,44 +13,56 @@
         </button>
         <ul class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% if request.user.is_authenticated %}
+                {% if request.user.is_staff or request.user.is_superuser %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {% if request.resolve_match.url_name == 'other' %} active {% endif %}"
+                        <a class="nav-link dropdown-toggle {% if request.path == '/news/' or request.path == '/news/add/' %}active {% endif %}"
                            href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             News
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item " href="{% url 'news list' %}">View News</a></li>
+                            <li><a class="dropdown-item" href="{% url 'news list' %}">View News</a></li>
                             <li><a class="dropdown-item " href="{% url 'news add' %}">Add News</a></li>
                         </ul>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'news list' %}">News</a>
+                        <a class="nav-link {% if request.path == '/news/' %} active {% endif %}"
+                           href="{% url 'news list' %}">News</a>
                     </li>
                 {% endif %}
                 {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                        <a class="nav-link dropdown-toggle
+{% if request.path == '/games/' or request.path == '/games/add/' or request.path == '/games/waiting-approve/' %}
+active {% endif %}" href="#" role="button"
                            data-bs-toggle="dropdown"
                            aria-expanded="false">
                             Games
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item " href="{% url 'games list' %}">View Games</a></li>
-                            <li><a class="dropdown-item " href="{% url 'game add' %}">Add Game</a></li>
-                            <li><a class="dropdown-item " href="{% url 'waiting approve' %}">Waiting For Approve</a>
+                            <li><a class="dropdown-item " href="{% url 'game add' %}">
+                                {% if request.user.is_staff or request.user.is_superuser %}Add Game {% else %}Suggest
+                                    Game{% endif %}
+                            </a>
                             </li>
+                            {% if request.user.is_staff or request.user.is_superuser %}
+                                <li>
+                                    <a class="dropdown-item " href="{% url 'waiting approve' %}">Waiting For Approve</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'games list' %}">Games</a>
+                        <a class="nav-link{% if request.path == '/games/' %} active {% endif %}"
+                           href="{% url 'games list' %}">Games</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'guide select view' %}">Guides</a>
+                    <a class="nav-link {% if request.path == '/guides/' %} active {% endif %}"
+                       href="{% url 'guide select view' %}">Guides</a>
                 </li>
             </ul>
             {% if search_form %}
@@ -66,17 +78,21 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile details' pk=request.user.profile.pk %}">Profile</a>
+                        <a class="nav-link{% if '/accounts/profile/details/' in request.path %} active {% endif %}"
+                           href="{% url 'profile details' pk=request.user.profile.pk %}">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+
+                        <a class="nav-link{% if request.path == '/accounts/login/' %} active {% endif %}"
+                           href="{% url 'login' %}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        <a class="nav-link{% if request.path == '/accounts/register/' %} active {% endif %}"
+                           href="{% url 'register' %}">Register</a>
                     </li>
                 {% endif %}
             </ul>

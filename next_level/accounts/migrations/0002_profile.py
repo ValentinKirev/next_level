@@ -4,7 +4,7 @@ from django.conf import settings
 import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
-import next_level.accounts.validators
+import next_level.validators
 
 
 class Migration(migrations.Migration):
@@ -18,13 +18,13 @@ class Migration(migrations.Migration):
             name='Profile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(blank=True, max_length=25, null=True, validators=[django.core.validators.MinLengthValidator(2), next_level.accounts.validators.validate_names_contain_only_letters])),
-                ('last_name', models.CharField(blank=True, max_length=25, null=True, validators=[django.core.validators.MinLengthValidator(2), next_level.accounts.validators.validate_names_contain_only_letters])),
+                ('first_name', models.CharField(blank=True, max_length=25, null=True, validators=[django.core.validators.MinLengthValidator(2), next_level.validators.validate_names_contain_only_letters])),
+                ('last_name', models.CharField(blank=True, max_length=25, null=True, validators=[django.core.validators.MinLengthValidator(2), next_level.validators.validate_names_contain_only_letters])),
                 ('age', models.PositiveIntegerField(blank=True, null=True, validators=[django.core.validators.MinValueValidator(12)])),
                 ('gender', models.CharField(blank=True, choices=[('Male', 'Male'), ('Female', 'Female'), ('Dont show', 'Dont show')], max_length=9, null=True)),
                 ('city', models.CharField(blank=True, max_length=30, null=True)),
                 ('description', models.TextField(blank=True, null=True)),
-                ('profile_picture', models.ImageField(blank=True, null=True, upload_to='profiles', validators=[next_level.accounts.validators.validate_image_sile_less_than_5mb])),
+                ('profile_picture', models.ImageField(blank=True, null=True, upload_to='profiles', validators=[next_level.validators.validate_image_sile_less_than_5mb])),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

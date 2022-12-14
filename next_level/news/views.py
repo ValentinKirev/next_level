@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
@@ -29,11 +30,12 @@ class NewsList(ListView):
         return self.queryset
 
 
-class NewsAddView(CreateView):
+class NewsAddView(PermissionRequiredMixin, CreateView):
     template_name = 'base/form-page.html'
     model = NewsPost
     form_class = NewsCreateForm
     success_url = reverse_lazy('news list')
+    permission_required = 'news.add_newspost'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -61,10 +63,11 @@ class NewsDetailsView(DetailView):
         return context
 
 
-class NewsEditView(UpdateView):
+class NewsEditView(PermissionRequiredMixin, UpdateView):
     template_name = 'base/form-page.html'
     model = NewsPost
     form_class = NewsEditForm
+    permission_required = 'news.change_newspost'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -83,9 +86,10 @@ class NewsEditView(UpdateView):
         })
 
 
-class NewsDeleteView(DeleteView):
+class NewsDeleteView(PermissionRequiredMixin, DeleteView):
     model = NewsPost
     success_url = reverse_lazy('news list')
+    permission_required = 'news.delete_newspost'
 
     def get(self, request, *args, **kwargs):
         news_post = self.get_object()

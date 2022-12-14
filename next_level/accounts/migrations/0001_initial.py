@@ -3,7 +3,7 @@
 import django.core.validators
 from django.db import migrations, models
 import next_level.accounts.managers
-import next_level.accounts.validators
+import next_level.validators
 
 
 class Migration(migrations.Migration):
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('username', models.CharField(max_length=20, unique=True, validators=[django.core.validators.MinLengthValidator(3), next_level.accounts.validators.validate_username_contains_allowed_characters])),
+                ('username', models.CharField(max_length=20, unique=True, validators=[django.core.validators.MinLengthValidator(3), next_level.validators.validate_username_contains_allowed_characters])),
                 ('email', models.EmailField(max_length=254, unique=True)),
                 ('is_superuser', models.BooleanField(default=False)),
                 ('is_staff', models.BooleanField(default=False)),

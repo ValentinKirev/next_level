@@ -4,7 +4,7 @@
     <section class="container-fluid justify-content-center pt-10 pb-10">
         <div class="container-sm justify-content-center">
             <form class="col-lg-8 offset-lg-2 container-fluid" action="{{ url }}"
-                  method="post" {% if media %} enctype="multipart/form-data" {% endif %}>
+                  method="post" {% if media %} enctype="multipart/form-data" {% endif %} id="form">
                 {% for field in form %}
                     <div class="container-fluid">
                         <label class="row justify-content-center col-form-label"
@@ -16,11 +16,33 @@
                     </div>
                 {% endfor %}
                 <div class="container-fluid">
-                    <input type="submit" class="btn btn-primary form-control" {% if button %} value="{{ button }}"
-                    {% else %} value="Add" {% endif %}>
+                    <input type="submit" class="btn btn-primary form-control" id="submitBtn"
+                           onclick="disableSubmitButton()"
+                            {% if button %} value="{{ button }}"
+                            {% else %} value="Add" {% endif %}>
                 </div>
                 {% csrf_token %}
             </form>
         </div>
     </section>
+    <script>
+        function disableSubmitButton() {
+            let form = document.getElementById('form');
+            let formElements = Array.from(form.elements)
+            let formValid = true
+
+            for (let element of formElements) {
+                if (element.required && element.value === '') {
+                    formValid = false;
+                    break;
+                }
+            }
+
+            document.getElementById('submitBtn').onclick = function () {
+                if (formValid) {
+                    document.getElementById("submitBtn").disabled = "true";
+                }
+            }
+        }
+    </script>
 {% endblock %}

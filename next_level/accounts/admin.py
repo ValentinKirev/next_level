@@ -12,6 +12,7 @@ UserModel = get_user_model()
 class AppUserAdmin(auth_admin.UserAdmin):
     add_form = UserCreateForm
     list_display = ('username', 'email', 'is_superuser', 'is_staff', 'is_active')
+    search_fields = ('username', 'email')
 
     fieldsets = (
         (
@@ -65,4 +66,22 @@ class AppUserAdmin(auth_admin.UserAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'first_name', 'last_name', 'age', 'gender', 'country',
+                    'city', 'profile_picture', 'user')
+
+    search_fields = ('first_name', 'last_name')
+
+    ordering = ('-id', '-age', 'gender')
+
+    list_filter = ('age', 'gender', 'city', 'user')
+
+    fieldsets = (
+        (None, {
+            'fields': ('first_name', 'last_name', 'age', 'gender', 'country',
+                       'city', 'user')
+        }),
+        ('Media files', {
+            'fields': ('profile_picture',),
+        }),
+    )
+

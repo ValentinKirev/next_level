@@ -1,14 +1,18 @@
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, UpdateView, DeleteView, ListView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, TemplateView
 
 from next_level.common.forms import CommentCreateForm, CommentEditForm, SearchForm
 from next_level.common.models import Comment, Like, Rating
 from next_level.games.models import Game
 from next_level.guides.models import GuidePost
 from next_level.news.models import NewsPost
+from next_level.utils import UserOwnerMixin
+
+UserModel = get_user_model()
 
 
 class IndexView(ListView):
@@ -18,6 +22,17 @@ class IndexView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['news'] = NewsPost.objects.all().order_by('-id')[:3]
+
+        return context
+
+
+class AboutView(TemplateView):
+    template_name = 'about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
+        context['developer'] = UserModel.objects.get(pk=1)
 
         return context
 
@@ -37,7 +52,7 @@ class CommentAddView(CreateView):
         return super().form_valid(form)
 
 
-class CommentEditView(UpdateView):
+class CommentEditView(UserOwnerMixin, UpdateView):
     template_name = 'base/form-page.html'
     model = Comment
     form_class = CommentEditForm
@@ -59,7 +74,7 @@ class CommentEditView(UpdateView):
         })
 
 
-class CommentDeleteView(DeleteView):
+class CommentDeleteView(UserOwnerMixin, DeleteView):
     model = Comment
 
     def get_success_url(self):

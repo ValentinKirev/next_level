@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load games_custom_filters %}
 {% load embed_video_tags %}
 {% load static %}
 
@@ -39,8 +40,9 @@
                                     </li>
                                     <li class="mb-2 mb-xl-3 display-28 text-center">
                                         <span
-                                            class="display-26 text-primary me-2 font-weight-600">
-                                        <a href="{% url 'guide category list' game_slug=object.slug %}" class="btn btn-secondary">
+                                                class="display-26 text-primary me-2 font-weight-600">
+                                        <a href="{% url 'guide category list' game_slug=object.slug %}"
+                                           class="btn btn-secondary">
                                         View Guides</a>
                                     </span>
                                     </li>
@@ -59,48 +61,52 @@
                     </div>
                 </div>
                 <div class="row mb-sm-2">
-                    <div class="container-fluid text-center">
-                        <form action="{% url 'rate' object.slug %}" method="post">
-                            <div class="rate">
-                                <input type="submit" id="star5" name="rate" value="5">
-                                {% if user_rating < 5 %}
-                                    <label for="star5" title="text">5 stars</label>
-                                {% else %}
-                                    <label class="marked" for="star5" title="text">5 stars</label>
-                                {% endif %}
-                                <input type="submit" id="star4" name="rate" value="4">
-                                {% if user_rating < 4 %}
-                                    <label for="star4" title="text">4 stars</label>
-                                {% else %}
-                                    <label class="marked" for="star4" title="text">4 stars</label>
-                                {% endif %}
-                                <input type="submit" id="star3" name="rate" value="3">
-                                {% if user_rating < 3 %}
-                                    <label for="star3" title="text">3 stars</label>
-                                {% else %}
-                                    <label class="marked" for="star3" title="text">3 stars</label>
-                                {% endif %}
-                                <input type="submit" id="star2" name="rate" value="2">
-                                {% if user_rating < 2 %}
-                                    <label for="star2" title="text">2 stars</label>
-                                {% else %}
-                                    <label class="marked" for="star2" title="text">2 stars</label>
-                                {% endif %}
-                                <input type="submit" id="star1" name="rate" value="1">
-                                {% if user_rating < 1 %}
-                                    <label for="star1" title="text">1 star</label>
-                                {% else %}
-                                    <label class="marked" for="star1" title="text">1 star</label>
-                                {% endif %}
-                            </div>
-                            {% csrf_token %}
-                        </form>
-                    </div>
+                    {% if request.user.is_authenticated %}
+                        <div class="container-fluid text-center">
+                            <form action="{% url 'rate' object.slug %}" method="post">
+                                <div class="rate">
+                                    <input type="submit" id="star5" name="rate" value="5">
+                                    {% if user_rating < 5 %}
+                                        <label for="star5" title="text">5 stars</label>
+                                    {% else %}
+                                        <label class="marked" for="star5" title="text">5 stars</label>
+                                    {% endif %}
+                                    <input type="submit" id="star4" name="rate" value="4">
+                                    {% if user_rating < 4 %}
+                                        <label for="star4" title="text">4 stars</label>
+                                    {% else %}
+                                        <label class="marked" for="star4" title="text">4 stars</label>
+                                    {% endif %}
+                                    <input type="submit" id="star3" name="rate" value="3">
+                                    {% if user_rating < 3 %}
+                                        <label for="star3" title="text">3 stars</label>
+                                    {% else %}
+                                        <label class="marked" for="star3" title="text">3 stars</label>
+                                    {% endif %}
+                                    <input type="submit" id="star2" name="rate" value="2">
+                                    {% if user_rating < 2 %}
+                                        <label for="star2" title="text">2 stars</label>
+                                    {% else %}
+                                        <label class="marked" for="star2" title="text">2 stars</label>
+                                    {% endif %}
+                                    <input type="submit" id="star1" name="rate" value="1">
+                                    {% if user_rating < 1 %}
+                                        <label for="star1" title="text">1 star</label>
+                                    {% else %}
+                                        <label class="marked" for="star1" title="text">1 star</label>
+                                    {% endif %}
+                                </div>
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                    {% endif %}
                     <div class="container-fluid text-center">
                         <a class="btn btn-secondary p-sm-2 m-sm-2" href="{{ object.official_website }}">Play Now</a>
-                        {% if request.user == object.author %}
+                        {% if request.user == object.author or request.user|has_group:"Admin" or request.user|has_group:"Staff" %}
                             <a href="{% url 'game edit' slug=object.slug %}" class="btn btn-primary p-sm-2 m-sm-2">Edit
                                 Game</a>
+                        {% endif %}
+                        {% if request.user == object.author or request.user|has_group:"Admin" %}
                             <button type="button" class="btn btn-danger p-sm-2 m-sm-2" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
                                 Delete Game
@@ -151,7 +157,6 @@
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </section>
 {% endblock %}

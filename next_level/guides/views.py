@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView, TemplateView
@@ -7,6 +8,7 @@ from next_level.games.models import Game
 from next_level.guides.forms import GuideCategoryCreateForm, GuideCategoryEditForm, GuidePostCreateForm, \
     GuidePostEditForm
 from next_level.guides.models import GuideCategory, GuidePost
+from next_level.utils import UserOwnerMixin
 
 
 class GuideCategoryListView(ListView):
@@ -27,10 +29,11 @@ class GuideCategoryListView(ListView):
         return context
 
 
-class GuideCategoryAddView(CreateView):
+class GuideCategoryAddView(PermissionRequiredMixin, CreateView):
     template_name = 'base/form-page.html'
     model = GuideCategory
     form_class = GuideCategoryCreateForm
+    permission_required = 'guides.add_guidecategory'
 
     def get_success_url(self):
         return reverse_lazy('guide category list', kwargs={
@@ -71,10 +74,11 @@ class GuideSelectGameView(TemplateView):
         return context
 
 
-class GuideCategoryEditView(UpdateView):
+class GuideCategoryEditView(PermissionRequiredMixin, UpdateView):
     model = GuideCategory
     template_name = 'base/form-page.html'
     form_class = GuideCategoryEditForm
+    permission_required = 'guides.change_guidecategory'
 
     def get_success_url(self):
         return reverse_lazy('guide category list', kwargs={
@@ -94,8 +98,9 @@ class GuideCategoryEditView(UpdateView):
         return context
 
 
-class GuideCategoryDeleteView(DeleteView):
+class GuideCategoryDeleteView(PermissionRequiredMixin, DeleteView):
     model = GuideCategory
+    permission_required = 'guides.delete_guidecategory'
 
     def get(self, request, *args, **kwargs):
         success_url = reverse_lazy('guide category list', kwargs={
@@ -135,10 +140,11 @@ class GuidePostListView(ListView):
         return self.queryset
 
 
-class GuidePostAddView(CreateView):
+class GuidePostAddView(PermissionRequiredMixin, CreateView):
     template_name = 'base/form-page.html'
     model = GuidePost
     form_class = GuidePostCreateForm
+    permission_required = 'guides.add_guidepost'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -174,11 +180,12 @@ class GuidePostDetailsView(DetailView):
         return context
 
 
-class GuidePostEditView(UpdateView):
+class GuidePostEditView(PermissionRequiredMixin, UserOwnerMixin, UpdateView):
     template_name = 'base/form-page.html'
     model = GuidePost
     form_class = GuidePostEditForm
     success_url = reverse_lazy('index')
+    permission_required = 'guides.change_guidepost'
 
     def get_success_url(self):
         return reverse_lazy('guide posts list', kwargs={
@@ -200,8 +207,9 @@ class GuidePostEditView(UpdateView):
         return context
 
 
-class GuidePostDeleteView(DeleteView):
+class GuidePostDeleteView(PermissionRequiredMixin, UserOwnerMixin, DeleteView):
     model = GuidePost
+    permission_required = 'guides.delete_guidepost'
 
     def get(self, request, *args, **kwargs):
         success_url = reverse_lazy('guide posts list', kwargs={

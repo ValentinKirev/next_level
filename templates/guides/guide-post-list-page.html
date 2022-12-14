@@ -10,8 +10,10 @@
     {% endif %}
     <section class="container-fluid justify-content-center pt-10 pb-10">
         <div class="container w-75 justify-content-center">
-            <div class="card mb-5 align-items-center">
-                <a class="btn btn-secondary w-25" href="{{ add_url }}">Add Guide</a>
+            <div class="card mb-5 align-items-center pt-3">
+                {% if perms.guides.add_guidepost %}
+                    <a class="btn btn-secondary w-25" href="{{ add_url }}">Add Guide</a>
+                {% endif %}
                 <div class="container-fluid text-center w-75">
                     {% for post in guidepost_list %}
                         <div class="card mb-3">

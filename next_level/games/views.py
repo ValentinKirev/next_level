@@ -1,13 +1,16 @@
 import html
 
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
 from next_level.common.forms import SearchForm
 from next_level.games.forms import GameCreateForm, GameEditForm, FilterForm
 from next_level.games.models import Game
+from next_level.utils import UserOwnerMixin
 
 
 class GameListView(ListView):
@@ -52,11 +55,12 @@ class GameListView(ListView):
         return self.queryset
 
 
-class GameAddView(CreateView):
+class GameAddView(PermissionRequiredMixin, CreateView):
     model = Game
     form_class = GameCreateForm
     template_name = 'base/form-page.html'
     success_url = reverse_lazy('games list')
+    permission_required = 'games.add_game'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -68,6 +72,9 @@ class GameAddView(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+
+        if self.request.user.groups.filter(name='Staff').exists() or self.request.user.groups.filter(name='Admin').exists():
+            form.instance.status = 'Approved'
 
         return super().form_valid(form)
 
@@ -91,16 +98,18 @@ class GameDetailsView(DetailView):
         context['rates_count'] = rates_count
 
         try:
-            context['user_rating'] = game.rating_set.get(user=self.request.user).rating
+            if self.request.user.is_authenticated:
+                context['user_rating'] = game.rating_set.get(user=self.request.user).rating
         except ObjectDoesNotExist:
             context['user_rating'] = 0
         return context
 
 
-class GameEditView(UpdateView):
+class GameEditView(PermissionRequiredMixin, UserOwnerMixin, UpdateView):
     model = Game
     form_class = GameEditForm
     template_name = 'base/form-page.html'
+    permission_required = 'games.change_game'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -119,9 +128,10 @@ class GameEditView(UpdateView):
         })
 
 
-class GameDeleteView(DeleteView):
+class GameDeleteView(PermissionRequiredMixin, UserOwnerMixin, DeleteView):
     model = Game
     success_url = reverse_lazy('games list')
+    permission_required = 'games.delete_game'
 
     def get(self, request, *args, **kwargs):
         game = self.get_object()
@@ -143,15 +153,23 @@ class GameDeleteView(DeleteView):
         return HttpResponseRedirect(self.success_url)
 
 
-class GamesWaitingApproveListView(ListView):
+class GamesWaitingApproveListView(TemplateView):
     model = Game
     template_name = 'games/games-waiting-approve-page.html'
-    queryset = model.objects.filter(status='Pending').order_by('-id')
+
+    def get(self, request, *args, **kwargs):
+        games_list = self.model.objects.filter(status='Pending').order_by('-id')
+
+        if not request.user.groups.filter(name='Staff').exists() and not request.user.groups.filter(name='Admin').exists():
+            return HttpResponseRedirect(reverse_lazy('index'))
+
+        return render(request, self.template_name, context={'games_list': games_list})
 
 
-class ApproveGameView(UpdateView):
+class ApproveGameView(PermissionRequiredMixin, UpdateView):
     model = Game
     success_url = reverse_lazy('waiting approve')
+    permission_required = 'games.change_game'
 
     def get(self, request, *args, **kwargs):
         game = self.model.objects.get(slug=self.kwargs['slug'])
@@ -161,9 +179,10 @@ class ApproveGameView(UpdateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class RejectGameView(UpdateView):
+class RejectGameView(PermissionRequiredMixin, UpdateView):
     model = Game
     success_url = reverse_lazy('waiting approve')
+    permission_required = 'games.change_game'
 
     def get(self, request, *args, **kwargs):
         game = self.model.objects.get(slug=self.kwargs['slug'])

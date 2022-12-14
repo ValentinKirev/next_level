@@ -4,31 +4,33 @@
     {% if not game_list %}
         <section class="container-fluid justify-content-center pt-10 pb-10">
             <div class="container w-50 justify-content-center">
-                <h3 class="p-3">No results found!</h3>
+                <h3 class="p-3">No games found!</h3>
             </div>
         </section>
     {% endif %}
     {% if game_list %}
-        <section class="container-fluid justify-content-center pt-5 pb-5">
-            <div class="container-sm justify-content-center">
-                <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'games list' %}" method="get">
-                    {% for field in filter_form %}
+        {% if request.user.is_authenticated %}
+            <section class="container-fluid justify-content-center pt-5">
+                <div class="container-sm justify-content-center">
+                    <form class="col-lg-8 offset-lg-2 container-fluid" action="{% url 'games list' %}" method="get">
+                        {% for field in filter_form %}
+                            <div class="container-fluid">
+                                <label class="row justify-content-center col-form-label"
+                                       for="{{ field.name }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="invalid-feedback">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                         <div class="container-fluid">
-                            <label class="row justify-content-center col-form-label"
-                                   for="{{ field.name }}">{{ field.label }}</label>
-                            {{ field }}
-                            {% if field.errors %}
-                                <div class="invalid-feedback">{{ field.errors }}</div>
-                            {% endif %}
+                            <input type="submit" class="btn btn-primary form-control" value="Filter">
                         </div>
-                    {% endfor %}
-                    <div class="container-fluid">
-                        <input type="submit" class="btn btn-primary form-control" value="Filter">
-                    </div>
-                </form>
-            </div>
-        </section>
-        <section class="container-fluid justify-content-center">
+                    </form>
+                </div>
+            </section>
+        {% endif %}
+        <section class="container-fluid justify-content-center pt-10">
             {% include 'base/partials/paginator.html' %}
         </section>
     {% endif %}

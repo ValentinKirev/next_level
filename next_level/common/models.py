@@ -64,6 +64,12 @@ class Like(models.Model):
         on_delete=models.RESTRICT
     )
 
+    def __str__(self):
+        result = f"ID={self.id} author={self.author} "
+        result += f"to_guide_post={self.to_guide_post}" if self.to_guide_post else f"to_news_post={self.to_news_post}"
+
+        return result
+
 
 class Rating(models.Model):
     user = models.ForeignKey(
@@ -81,3 +87,6 @@ class Rating(models.Model):
         null=False,
         blank=False
     )
+
+    def __str__(self):
+        return f"ID={self.id} author={self.user} to_game={self.game}"

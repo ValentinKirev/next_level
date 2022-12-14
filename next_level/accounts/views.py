@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
@@ -7,6 +8,7 @@ from django.views.generic import CreateView, UpdateView, DetailView, DeleteView,
 
 from next_level.accounts.forms import UserCreateForm, UserLoginForm, ProfileEditForm
 from next_level.accounts.models import Profile
+from next_level.utils import UserOwnerMixin
 
 UserModel = get_user_model()
 
@@ -48,10 +50,11 @@ class ProfileDetailsView(DetailView):
     template_name = 'accounts/profile-details-page.html'
 
 
-class ProfileEditView(UpdateView):
+class ProfileEditView(PermissionRequiredMixin, UserOwnerMixin, UpdateView):
     template_name = 'accounts/profile-edit-page.html'
     model = Profile
     form_class = ProfileEditForm
+    permission_required = 'accounts.change_profile'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -68,9 +71,10 @@ class ProfileEditView(UpdateView):
         })
 
 
-class ProfileDeleteView(DeleteView):
+class ProfileDeleteView(PermissionRequiredMixin, UserOwnerMixin, DeleteView):
     model = Profile
     success_url = reverse_lazy('profile successfully deleted')
+    permission_required = 'accounts.delete_profile'
 
     def get(self, request, *args, **kwargs):
         user = self.get_object().user
@@ -81,9 +85,30 @@ class ProfileDeleteView(DeleteView):
             news_post.like_set.all().delete()
 
         news_posts.delete()
-        user.guidepost_set.all().delete()
-        user.guidecategory_set.all().delete()
+
+        games = user.game_set.all()
+
+        for game in games:
+            categories = game.guidecategory_set.all()
+
+            for category in categories:
+                posts = category.guidepost_set.all()
+
+                for post in posts:
+                    post.guides_like_set.all().delete()
+
+                posts.delete()
+
+            categories.delete()
+
+        user_guides = user.guidepost_set.all()
+
+        for guide in user_guides:
+            guide.guides_like_set.all().delete()
+
+        user_guides.delete()
         user.rating_set.all().delete()
+        user.like_set.all().delete()
         user.profile.delete()
         user.delete()
 

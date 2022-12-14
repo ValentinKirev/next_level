@@ -35,6 +35,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'next_level.accounts.middleware.RestrictStaffToAdminMiddleware'
 ]
 
 ROOT_URLCONF = 'next_level.urls'

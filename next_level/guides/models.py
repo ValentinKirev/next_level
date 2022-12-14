@@ -1,18 +1,26 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils.text import slugify
 
 from next_level.games.models import Game
+from next_level.validators import validate_all_characters_is_alphanumeric
 
 UserModel = get_user_model()
 
 
 class GuideCategory(models.Model):
+    class Meta:
+        verbose_name_plural = 'Categories'
+
     MAX_TITLE_LENGTH = 50
 
     title = models.CharField(
         max_length=MAX_TITLE_LENGTH,
-        unique=True,
+        validators=(
+            validate_all_characters_is_alphanumeric,
+            MinLengthValidator(2)
+        ),
         null=False,
         blank=False
     )
@@ -68,7 +76,10 @@ class GuidePost(models.Model):
 
     title = models.CharField(
         max_length=MAX_TITLE_LENGTH,
-        unique=True,
+        validators=(
+            validate_all_characters_is_alphanumeric,
+            MinLengthValidator(2)
+        ),
         null=False,
         blank=False
     )
@@ -106,6 +117,9 @@ class GuidePost(models.Model):
         null=False,
         blank=True
     )
+
+    def __str__(self):
+        return self.title
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

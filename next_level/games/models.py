@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.utils.text import slugify
 from embed_video.fields import EmbedVideoField
 
+from next_level.validators import validate_all_characters_is_alphanumeric, validate_image_sile_less_than_5mb
 
 UserModel = get_user_model()
 
@@ -36,6 +38,10 @@ class Game(models.Model):
     title = models.CharField(
         max_length=MAX_NAME_LENGTH,
         unique=True,
+        validators=(
+            validate_all_characters_is_alphanumeric,
+            MinLengthValidator(2)
+        ),
         null=False,
         blank=False
     )
@@ -47,12 +53,18 @@ class Game(models.Model):
 
     image = models.FileField(
         upload_to='games',
+        validators=(
+            validate_image_sile_less_than_5mb,
+        ),
         null=False,
         blank=False,
     )
 
     developer = models.CharField(
         max_length=MAX_DEVELOPER_LENGTH,
+        validators=(
+            MinLengthValidator(2),
+        ),
         null=False,
         blank=False
     )

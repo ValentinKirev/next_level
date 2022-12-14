@@ -2,7 +2,7 @@
 
 import django.core.validators
 from django.db import migrations, models
-import next_level.accounts.validators
+import next_level.validators
 
 
 class Migration(migrations.Migration):
@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='appuser',
             name='username',
-            field=models.CharField(max_length=50, unique=True, validators=[django.core.validators.MinLengthValidator(3), next_level.accounts.validators.validate_username_contains_allowed_characters]),
+            field=models.CharField(max_length=50, unique=True, validators=[django.core.validators.MinLengthValidator(3), next_level.validators.validate_username_contains_allowed_characters]),
         ),
     ]

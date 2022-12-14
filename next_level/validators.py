@@ -1,6 +1,12 @@
 from django.core.exceptions import ValidationError
 
 
+def validate_all_characters_is_alphanumeric(value):
+    for ch in value:
+        if not ch.isalnum() and ch != ' ':
+            raise ValidationError('Title must contain only letters and digits!')
+
+
 def validate_username_contains_allowed_characters(value):
 
     for character in value:
