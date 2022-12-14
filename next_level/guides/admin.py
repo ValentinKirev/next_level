@@ -29,7 +29,7 @@ class GuideCategoryAdmin(admin.ModelAdmin):
 @admin.register(GuidePost)
 class GuidePostAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'publication_date_and_time', 'updated_on',
-                    'to_category', 'slug', 'author')
+                    'to_category', 'image', 'slug', 'author')
 
     search_fields = ('title', 'to_category__title', 'author__username')
 
@@ -39,7 +39,7 @@ class GuidePostAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('title', 'description', 'to_category')
+            'fields': ('title', 'description', 'to_category', 'image')
         }),
     )
 

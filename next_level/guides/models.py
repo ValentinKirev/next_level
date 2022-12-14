@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.text import slugify
 
 from next_level.games.models import Game
-from next_level.validators import validate_all_characters_is_alphanumeric
+from next_level.validators import validate_all_characters_is_alphanumeric, validate_image_sile_less_than_5mb
 
 UserModel = get_user_model()
 
@@ -87,6 +87,15 @@ class GuidePost(models.Model):
     description = models.TextField(
         null=False,
         blank=False
+    )
+
+    image = models.ImageField(
+        upload_to='guides',
+        validators=(
+            validate_image_sile_less_than_5mb,
+        ),
+        null=True,
+        blank=True
     )
 
     publication_date_and_time = models.DateTimeField(
