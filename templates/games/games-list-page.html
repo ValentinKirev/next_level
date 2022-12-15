@@ -38,7 +38,9 @@
         <div class="container w-50 justify-content-center">
             {% for game in game_list %}
                 <div class="card mb-3">
-                    <img src="{{ game.image.url }}" class="card-img-top" alt="image-cap">
+                    <a href="{% url 'game details' slug=game.slug %}">
+                        <img src="{{ game.image.url }}" class="card-img-top" alt="image-cap">
+                    </a>
                     <div class="card-body">
                         <h4>
                             <a href="{% url 'game details' slug=game.slug %}"

@@ -17,7 +17,9 @@
         <div class="container w-50 justify-content-center">
             {% for news_post in newspost_list %}
                 <div class="card mb-3">
-                    <img src="{{ news_post.image.url }}" class="card-img-top" alt="image-cap">
+                    <a href="{% url 'news details' slug=news_post.slug %}">
+                        <img src="{{ news_post.image.url }}" class="card-img-top" alt="image-cap">
+                    </a>
                     <div class="card-body">
                         <h4>
                             <a href="{% url 'news details' slug=news_post.slug %}"

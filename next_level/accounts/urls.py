@@ -6,7 +6,7 @@ from next_level.accounts.views import SignUpView, SignInView, SignOutView, Profi
 
 urlpatterns = [
     path('register/', SignUpView.as_view(), name='register'),
-    path('login/', SignInView.as_view(), name='login'),
+    path('login/', SignInView.as_view(redirect_authenticated_user=True), name='login'),
     path('logout/', login_required(SignOutView.as_view()), name='logout'),
     path('profile/details/<int:pk>', login_required(ProfileDetailsView.as_view()), name='profile details'),
     path('profile/edit/<int:pk>', login_required(ProfileEditView.as_view()), name='profile edit'),

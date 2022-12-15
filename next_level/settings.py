@@ -1,14 +1,30 @@
+import os
 from pathlib import Path
 
 from django.urls import reverse_lazy
+from django.views.generic import DetailView
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-rg_b)^6h)(93odh_8q*dt3kv@h^!5wdeor=f8(d7qcf4aph@$*'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = True
+DEBUG = int(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
+
+if DEBUG:
+    EMAIL_HOST = os.environ.get('EMAIL_HOST')
+    EMAIL_PORT = os.environ.get('EMAIL_PORT')
+else:
+    EMAIL_BACKEND = 'django_mailjet.backends.MailjetBackend'
+    MAILJET_API_KEY = os.environ.get('EMAIL_HOST_USER')
+    MAILJET_API_SECRET = os.environ.get('EMAIL_HOST_PASSWORD')
+    EMAIL_HOST = os.environ.get('EMAIL_HOST')
+    EMAIL_PORT = os.environ.get('EMAIL_PORT')
+    EMAIL_USE_TLS = True
+    EMAIL_TIMEOUT = 30
+
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'embed_video',
+    'django_celery_results',
+    'celery',
 
     'next_level.news',
     'next_level.games',
@@ -61,12 +79,12 @@ WSGI_APPLICATION = 'next_level.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'next_level',
-        'USER': 'davq4a',
-        'PASSWORD': 'davq4a',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': os.environ.get('DB_ENGINE'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
@@ -163,3 +181,9 @@ LOGGING = {
         },
     },
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'

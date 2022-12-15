@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, TemplateView
 
@@ -17,6 +18,13 @@ class SignUpView(CreateView):
     template_name = 'accounts/register-page.html'
     model = UserModel
     form_class = UserCreateForm
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse_lazy('index'))
+        else:
+            form = self.form_class()
+            return render(request, self.template_name, {'form': form})
 
     def get_success_url(self):
         return reverse_lazy('profile edit', kwargs={

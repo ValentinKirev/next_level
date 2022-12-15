@@ -10,12 +10,12 @@
                     <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
                         <div class="row align-items-center">
                             {% if object.profile_picture %}
-                                <div class="col-lg-6 mb-4 mb-lg-0">
-                                    <img src="{{ object.profile_picture.url }}" class="img-fluid" alt="profile-img">
+                                <div class="col-lg-5 mb-4 mb-lg-0 offset-1">
+                                    <img src="{{ object.profile_picture.url }}" class="img-fluid img-thumbnail rounded-circle" alt="profile-img">
                                 </div>
                             {% else %}
-                                <div class="col-lg-6 mb-4 mb-lg-0">
-                                    <img src="{% static '/images/default-profile-img.png' %}" class="img-fluid"
+                                <div class="col-lg-5 mb-4 mb-lg-0 offset-1">
+                                    <img src="{% static '/images/default-profile-img.png' %}" class="img-fluid rounded-circle"
                                          alt="profile-img">
                                 </div>
                             {% endif %}

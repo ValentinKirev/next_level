@@ -18,7 +18,9 @@
         <div class="container w-50 justify-content-center">
             {% for news_post in news %}
                 <div class="card mb-3">
-                    <img src="{{ news_post.image.url }}" class="card-img-top" alt="image-cap">
+                    <a href="{% url 'news details' slug=news_post.slug %}">
+                        <img src="{{ news_post.image.url }}" class="card-img-top" alt="image-cap">
+                    </a>
                     <div class="card-body">
                         <h4>
                             <a href="{% url 'news details' slug=news_post.slug %}"
@@ -28,7 +30,7 @@
                         <p class="card-text"><small class="text-muted">
                             Added on {{ news_post.publication_date_and_time }} by
                             <a href="{% url 'profile details' pk=news_post.author.profile.pk %}">{{ news_post.author }}</a>
-                        , last update on {{ news_post.updated_on }}</small>
+                            , last update on {{ news_post.updated_on }}</small>
                         </p>
                     </div>
                 </div>

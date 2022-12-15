@@ -15,7 +15,8 @@
                     </div>
                 {% endfor %}
                 <div class="container-fluid">
-                    <input type="submit" class="btn btn-primary form-control" value="Register" id="submitBtn" onclick="disableSubmitButton()">
+                    <input type="submit" class="btn btn-primary form-control" value="Register" id="submitBtn"
+                           onclick="disableSubmitButton()">
                 </div>
                 <div class="row container-fluid">
                     <p>Already have account? <a href="{% url 'login' %}">Sign-In!</a></p>
@@ -31,7 +32,10 @@
             let formValid = true
 
             for (let element of formElements) {
-                if (element.required && element.value === '') {
+                if (element.name === 'email' && !element.value.includes('@')) {
+                    formValid = false;
+                    break;
+                } else if (element.required && element.value === '') {
                     formValid = false;
                     break;
                 }

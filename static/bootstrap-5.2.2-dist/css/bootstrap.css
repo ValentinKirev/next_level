@@ -719,8 +719,8 @@ progress {
 
 .img-thumbnail {
     padding: 0.25rem;
-    background-color: #fff;
-    border: 1px solid var(--bs-border-color);
+    background-color: black;
+    border: 3px solid black;
     border-radius: 0.375rem;
     max-width: 100%;
     height: auto;
@@ -9249,7 +9249,13 @@ textarea.form-control-lg {
 }
 
 .rounded-circle {
-    border-radius: 50% !important;
+    border-radius: 50%;
+    height: 300px;
+    width: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .rounded-pill {
