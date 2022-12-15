@@ -6,7 +6,7 @@ import sys
 import dotenv
 
 def main():
-    dotenv.read_dotenv('.env.develop')
+    dotenv.read_dotenv('.env.prod')
 
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'next_level.settings')

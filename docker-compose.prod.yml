@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   web:
-    build: ./next_level
+    build: .
     command: gunicorn next_level.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./staticfiles:/home/app/web/staticfiles

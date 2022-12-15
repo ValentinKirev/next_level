@@ -16,8 +16,6 @@ WORKDIR $APP_HOME
 
 RUN pip install --upgrade pip
 
-COPY ./requirements.txt .
+COPY . $APP_HOME
 
 RUN pip install -r requirements.txt
-
-COPY .. .
