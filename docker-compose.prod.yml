@@ -31,14 +31,9 @@ services:
     restart: always
     build:
       context: .
-    command: celery -A web worker -l info
+    command: celery -A next_level worker -l info
     volumes:
       - ./web:/web
-    environment:
-      - DB_HOST=postgres
-      - DB_NAME=next_level
-      - DB_USER=davq4a
-      - DB_PASS=davq4a
     depends_on:
       - postgres
       - redis
