@@ -23,6 +23,8 @@ else:
     EMAIL_PORT = os.environ.get('EMAIL_PORT')
     EMAIL_USE_TLS = True
     EMAIL_TIMEOUT = 30
+    
+    CSRF_TRUSTED_ORIGINS = [f'http://{x}' for x in ALLOWED_HOSTS]
 
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
