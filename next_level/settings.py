@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from django.urls import reverse_lazy
+from django.views.generic import DetailView
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,17 +15,14 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
 if DEBUG:
     EMAIL_HOST = os.environ.get('EMAIL_HOST')
     EMAIL_PORT = os.environ.get('EMAIL_PORT')
-
 else:
-    EMAIL_HOST = 'smtp-relay.sendinblue.com'
+    EMAIL_BACKEND = 'django_mailjet.backends.MailjetBackend'
+    MAILJET_API_KEY = os.environ.get('EMAIL_HOST_USER')
+    MAILJET_API_SECRET = os.environ.get('EMAIL_HOST_PASSWORD')
+    EMAIL_HOST = os.environ.get('EMAIL_HOST')
     EMAIL_PORT = os.environ.get('EMAIL_PORT')
-    EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
     EMAIL_USE_TLS = True
     EMAIL_TIMEOUT = 30
-
-ANYMAIL = {
-    "SENDINBLUE_API_KEY": os.environ.get('SENDINBLUE_API_KEY'),
-}
 
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
@@ -186,7 +184,6 @@ LOGGING = {
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
