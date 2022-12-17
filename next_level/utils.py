@@ -1,5 +1,4 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
 
@@ -24,8 +23,6 @@ class FormSelectClassMixin:
 
 class UserOwnerMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        obj = self.get_object()
-
         try:
             user = self.get_object().user
         except AttributeError as ex:

@@ -9,7 +9,7 @@ class RestrictStaffToAdminMiddleware(object):
     def __call__(self, request):
         if request.path.startswith(reverse('admin:index')):
             if request.user.is_authenticated:
-                if not request.user.groups.filter(name__in=['Admin', 'Staff']).exists():
+                if not request.user.is_staff or not request.user.is_superuser:
                     raise Http404
             else:
                 raise Http404

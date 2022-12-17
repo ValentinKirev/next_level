@@ -31,7 +31,7 @@ services:
     restart: always
     build:
       context: .
-    command: celery -A web worker -l info
+    command: celery -A next_level worker -l info
     volumes:
       - ./web:/web
     environment:
@@ -47,7 +47,7 @@ services:
     image: nginx
     container_name: nginx
     ports:
-      - 81:80
+      - 80:80
       - 443:443
     volumes:
       - ./staticfiles:/home/app/web/staticfiles
