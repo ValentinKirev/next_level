@@ -33,7 +33,7 @@ class AboutView(TemplateView):
         context = super().get_context_data()
 
         try:
-            context['developer'] = UserModel.objects.get(pk=1)
+            context['developer'] = UserModel.objects.filter(is_superuser=True).first()
         except ObjectDoesNotExist:
             raise Http404
 

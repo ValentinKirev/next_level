@@ -74,7 +74,9 @@ class Like(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey(
         UserModel,
-        on_delete=models.RESTRICT
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
 
     game = models.ForeignKey(

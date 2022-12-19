@@ -126,7 +126,6 @@ class ProfileDeleteView(PermissionRequiredMixin, UserOwnerMixin, DeleteView):
 
         user_categories.delete()
         user_guides.delete()
-        user.rating_set.all().delete()
         user.like_set.all().delete()
         user.profile.delete()
         user.delete()
