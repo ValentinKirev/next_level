@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 from django.urls import reverse_lazy
-from django.views.generic import DetailView
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
