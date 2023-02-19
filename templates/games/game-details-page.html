@@ -36,7 +36,7 @@
                                     </li>
                                     <li class="mb-2 mb-xl-3 display-28"><span
                                             class="display-26 text-primary me-2 font-weight-600">Average Rating:</span>
-                                        {{ object.average_rating }} / 5 ({{ rates_count }} rates)
+                                        {{ object.average_rating|floatformat:2 }} / 5 ({{ rates_count }} rates)
                                     </li>
                                     <li class="mb-2 mb-xl-3 display-28 text-center">
                                         <span
@@ -54,7 +54,7 @@
                 <div class="col-lg-12 mb-4 mb-sm-5">
                     <div>
                         <h5 class="section-title text-primary mb-3 mb-sm-4">Description:</h5>
-                        <p class="justify-content-center">{{ object.description }}</p>
+                        <p class="card-text text-center">{{ object.description }}</p>
                     </div>
                     <div class="text-center p-3 ratio ratio-16x9">
                         {% video object.trailer 'tiny' %}
